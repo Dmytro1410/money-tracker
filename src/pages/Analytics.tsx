@@ -1,7 +1,20 @@
-import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
-import { useUIStore, useAuthStore } from '@/stores'
-import { useAnalytics } from '@/hooks'
-import { formatCurrency, formatMonth } from '@/lib/formatters'
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
+import { useAuthStore, useUIStore } from '@/stores';
+import { useAnalytics } from '@/hooks';
+import { formatCurrency, formatMonth } from '@/lib/formatters';
 
 const TOOLTIP_STYLE = {
   backgroundColor: '#16162a',
@@ -9,15 +22,15 @@ const TOOLTIP_STYLE = {
   borderRadius: '10px',
   color: '#fff',
   fontSize: '12px',
-}
+};
 
 export default function Analytics() {
-  const profile = useAuthStore(s => s.profile)
-  const { selectedYear: year, selectedMonth: month } = useUIStore()
-  const currency = profile?.currency ?? 'CAD'
-  const { data, isLoading } = useAnalytics(year, month)
+  const profile = useAuthStore((s) => s.profile);
+  const { selectedMonth: month, selectedYear: year } = useUIStore();
+  const currency = profile?.currency ?? 'CAD';
+  const { data, isLoading } = useAnalytics(year, month);
 
-  if (isLoading) return <div className="p-7 text-white/30 text-sm">Загрузка аналитики…</div>
+  if (isLoading) return <div className="p-7 text-white/30 text-sm">Загрузка аналитики…</div>;
 
   return (
     <div className="p-7 max-w-5xl space-y-6">
@@ -32,7 +45,7 @@ export default function Analytics() {
           { label: 'Доходы', value: data?.income ?? 0, color: '#34d399' },
           { label: 'Расходы', value: data?.expense ?? 0, color: '#fb7185' },
           { label: 'Баланс', value: (data?.income ?? 0) - (data?.expense ?? 0), color: '#a78bfa' },
-        ].map(item => (
+        ].map((item) => (
           <div key={item.label} className="card-dark p-4">
             <p className="text-xs text-white/30 mb-1">{item.label}</p>
             <p className="font-display text-xl font-semibold" style={{ color: item.color }}>
@@ -45,24 +58,37 @@ export default function Analytics() {
       {/* Area chart */}
       <div className="card-dark p-5">
         <p className="font-display text-sm font-semibold text-white mb-4">Доходы и расходы по дням</p>
-        <ResponsiveContainer width="100%" height={200}>
+        <ResponsiveContainer height={200} width="100%">
           <AreaChart data={data?.by_day ?? []}>
             <defs>
-              <linearGradient id="gi" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#34d399" stopOpacity={0.2}/>
-                <stop offset="95%" stopColor="#34d399" stopOpacity={0}/>
+              <linearGradient id="gi" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="5%" stopColor="#34d399" stopOpacity={0.2} />
+                <stop offset="95%" stopColor="#34d399" stopOpacity={0} />
               </linearGradient>
-              <linearGradient id="ge" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#fb7185" stopOpacity={0.2}/>
-                <stop offset="95%" stopColor="#fb7185" stopOpacity={0}/>
+              <linearGradient id="ge" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="5%" stopColor="#fb7185" stopOpacity={0.2} />
+                <stop offset="95%" stopColor="#fb7185" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'rgba(255,255,255,0.3)' }} tickLine={false} axisLine={false} />
-            <YAxis tick={{ fontSize: 11, fill: 'rgba(255,255,255,0.3)' }} tickLine={false} axisLine={false} width={60}
-              tickFormatter={v => formatCurrency(v, currency)} />
-            <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => formatCurrency(v, currency)} />
-            <Area type="monotone" dataKey="income" name="Доходы" stroke="#34d399" strokeWidth={2} fill="url(#gi)" />
-            <Area type="monotone" dataKey="expense" name="Расходы" stroke="#fb7185" strokeWidth={2} fill="url(#ge)" />
+            <XAxis
+              axisLine={false}
+              dataKey="date"
+              tick={{ fontSize: 11, fill: 'rgba(255,255,255,0.3)' }}
+              tickLine={false}
+            />
+            <YAxis
+              axisLine={false}
+              tick={{ fontSize: 11, fill: 'rgba(255,255,255,0.3)' }}
+              tickFormatter={(v) => formatCurrency(v, currency)}
+              tickLine={false}
+              width={60}
+            />
+            <Tooltip
+              contentStyle={TOOLTIP_STYLE}
+              formatter={(v) => formatCurrency(Number(v), currency)}
+            />
+            <Area dataKey="income" fill="url(#gi)" name="Доходы" stroke="#34d399" strokeWidth={2} type="monotone" />
+            <Area dataKey="expense" fill="url(#ge)" name="Расходы" stroke="#fb7185" strokeWidth={2} type="monotone" />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -71,16 +97,27 @@ export default function Analytics() {
         {/* Pie */}
         <div className="card-dark p-5">
           <p className="font-display text-sm font-semibold text-white mb-4">Расходы по категориям</p>
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer height={200} width="100%">
             <PieChart>
-              <Pie data={data?.by_category ?? []} dataKey="total" nameKey="category_name"
-                cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3}>
+              <Pie
+                cx="50%"
+                cy="50%"
+                data={data?.by_category ?? []}
+                dataKey="total"
+                innerRadius={50}
+                nameKey="category_name"
+                outerRadius={80}
+                paddingAngle={3}
+              >
                 {(data?.by_category ?? []).map((cat, i) => (
-                  <Cell key={i} fill={cat.category_color || `hsl(${i * 45 + 200}, 70%, 60%)`} />
+                  <Cell key={cat.category_id} fill={cat.category_color || `hsl(${i * 45 + 200}, 70%, 60%)`} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => formatCurrency(v, currency)} />
-              <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }} />
+              <Tooltip
+                contentStyle={TOOLTIP_STYLE}
+                formatter={(v) => formatCurrency(Number(v), currency)}
+              />
+              <Legend iconSize={8} iconType="circle" wrapperStyle={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -88,16 +125,30 @@ export default function Analytics() {
         {/* Bar */}
         <div className="card-dark p-5">
           <p className="font-display text-sm font-semibold text-white mb-4">Топ категорий</p>
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer height={200} width="100%">
             <BarChart data={(data?.by_category ?? []).slice(0, 6)} layout="vertical">
-              <XAxis type="number" tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.3)' }} tickLine={false} axisLine={false}
-                tickFormatter={v => formatCurrency(v, currency)} />
-              <YAxis type="category" dataKey="category_name" tick={{ fontSize: 11, fill: 'rgba(255,255,255,0.5)' }}
-                tickLine={false} axisLine={false} width={90} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => formatCurrency(v, currency)} />
+              <XAxis
+                axisLine={false}
+                tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.3)' }}
+                tickFormatter={(v) => formatCurrency(v, currency)}
+                tickLine={false}
+                type="number"
+              />
+              <YAxis
+                axisLine={false}
+                dataKey="category_name"
+                tick={{ fontSize: 11, fill: 'rgba(255,255,255,0.5)' }}
+                tickLine={false}
+                type="category"
+                width={90}
+              />
+              <Tooltip
+                contentStyle={TOOLTIP_STYLE}
+                formatter={(v) => formatCurrency(Number(v), currency)}
+              />
               <Bar dataKey="total" name="Сумма" radius={[0, 6, 6, 0]}>
-                {(data?.by_category ?? []).slice(0, 6).map((_, i) => (
-                  <Cell key={i} fill={`hsl(${i * 40 + 200}, 70%, 60%)`} />
+                {(data?.by_category ?? []).slice(0, 6).map((cat, i) => (
+                  <Cell key={cat.category_id} fill={`hsl(${i * 40 + 200}, 70%, 60%)`} />
                 ))}
               </Bar>
             </BarChart>
@@ -105,5 +156,5 @@ export default function Analytics() {
         </div>
       </div>
     </div>
-  )
+  );
 }
