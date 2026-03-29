@@ -190,7 +190,11 @@ export function useBudgets(year: number, month: number) {
         .select('*, category:categories!budgets_category_id_fkey(id,name,icon,color)')
         .eq('year', year).eq('month', month);
       if (error) throw error;
-      return data as Budget[];
+      return {
+        all: data as Budget[],
+        childBudgets: (data as Budget[])?.filter((b) => b.parent_category_id),
+        parentBudgets: (data as Budget[])?.filter((b) => !b.parent_category_id),
+      };
     },
   });
 }
