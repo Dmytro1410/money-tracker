@@ -190,11 +190,7 @@ export function useBudgets(year: number, month: number) {
         .select('*, category:categories!budgets_category_id_fkey(id,name,icon,color)')
         .eq('year', year).eq('month', month);
       if (error) throw error;
-      return {
-        all: data as Budget[],
-        childBudgets: (data as Budget[])?.filter((b) => b.parent_category_id),
-        parentBudgets: (data as Budget[])?.filter((b) => !b.parent_category_id),
-      };
+      return data as Budget[];
     },
   });
 }
@@ -398,16 +394,74 @@ export function useDeleteCategory() {
   });
 }
 
-// ─── Analytics ───────────────────────────────────────────────
+// ─── Analytics (без Edge Function — считаем на фронте) ───────
 export function useAnalytics(year: number, month: number) {
   return useQuery({
     queryKey: ['analytics', year, month],
     queryFn: async (): Promise<PeriodSummary> => {
-      const { data, error } = await supabase.functions.invoke('analytics', {
-        body: { year, month },
-      });
+      const from = `${year}-${String(month).padStart(2, '0')}-01`;
+      const to = `${year}-${String(month).padStart(2, '0')}-31`;
+
+      const { data, error } = await supabase
+        .from('transactions')
+        .select(`*,
+          account:accounts!transactions_account_id_fkey(id,user_id,currency),
+          category:categories(id,name,icon,color,parent_id)`)
+        .gte('date', from).lte('date', to)
+        .in('type', ['income', 'expense']);
+
       if (error) throw error;
-      return data as PeriodSummary;
+      const txs = data as Transaction[];
+
+      const income = txs.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+      const expense = txs.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+
+      // По категориям
+      const catMap = new Map<string,
+        { name: string; icon: string; color: string; total: number; count: number }>();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const tx of txs.filter((t) => t.type === 'expense' && t.category)) {
+        const cat = tx.category!;
+        const key = cat.id;
+        const existing = catMap.get(key);
+        if (existing) {
+          existing.total += tx.amount;
+          existing.count += 1;
+        } else {
+          catMap.set(key, {
+            name: cat.name, icon: cat.icon, color: cat.color, total: tx.amount, count: 1,
+          });
+        }
+      }
+      const byCategory = Array.from(catMap.entries())
+        .map(([id, v]) => ({
+          category_id: id,
+          category_name: v.name,
+          category_icon: v.icon,
+          category_color: v.color,
+          total: v.total,
+          count: v.count,
+          percent: expense > 0 ? Math.round((v.total / expense) * 100 * 10) / 10 : 0,
+        }))
+        .sort((a, b) => b.total - a.total);
+
+      // По дням
+      const dayMap = new Map<string, { income: number; expense: number }>();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const tx of txs) {
+        const day = tx.date.slice(5).replace('-', '.'); // MM.DD
+        const existing = dayMap.get(day) ?? { income: 0, expense: 0 };
+        if (tx.type === 'income') existing.income += tx.amount;
+        if (tx.type === 'expense') existing.expense += tx.amount;
+        dayMap.set(day, existing);
+      }
+      const byDay = Array.from(dayMap.entries())
+        .map(([date, v]) => ({ date, ...v }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      return {
+        income, expense, balance: income - expense, by_category: byCategory, by_day: byDay,
+      };
     },
   });
 }
