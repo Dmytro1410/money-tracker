@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx eslint:*)",
+      "Bash(node -e \"console.log\\(require\\(''./node_modules/eslint-config-airbnb-typescript/package.json''\\).version\\); console.log\\(require\\(''./node_modules/@typescript-eslint/eslint-plugin/package.json''\\).version\\)\")",
+      "Bash(xargs sed:*)"
+    ]
+  }
+}
