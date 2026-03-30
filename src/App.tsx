@@ -77,7 +77,7 @@ export default function App() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-lime flex items-center justify-center mx-auto">
+          <div className="w-12 h-12 rounded-2xl bg-night-900 flex items-center justify-center mx-auto">
             <svg
               fill="none"
               height="22"

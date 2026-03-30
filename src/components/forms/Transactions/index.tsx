@@ -120,7 +120,7 @@ export default function AddTransactionForm({ onClose }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="flex rounded-xl overflow-hidden bg-ink-700">
+      <div className="flex rounded-xl overflow-hidden bg-night-700">
         {TABS.map((tab) => (
           <button
             key={tab.value}
@@ -232,7 +232,7 @@ export default function AddTransactionForm({ onClose }: Props) {
       )}
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-        <div className="w-full">
+        <div>
           <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">Date</label>
           <input className="input" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </div>
