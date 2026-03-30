@@ -9,7 +9,6 @@ export interface ITransactionsComponentProps {
   filter: TransactionFilter,
   filteredTransactions: Transaction[]
   isLoading: boolean,
-  onDelete: (txId: string) => void,
   onFilter: (f: TransactionFilter) => void,
   onSearch: (s: string) => void,
   onShowAdd: () => void,
@@ -23,7 +22,6 @@ export function TransactionsComponent({
   filter,
   filteredTransactions,
   isLoading,
-  onDelete,
   onFilter,
   onSearch,
   onShowAdd,
@@ -42,7 +40,6 @@ export function TransactionsComponent({
         filteredTransactions={filteredTransactions}
         isLoading={isLoading}
         search={search}
-        onDelete={onDelete}
         onShowAdd={onShowAdd}
       />
     </div>
