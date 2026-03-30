@@ -1,10 +1,9 @@
 import { formatCurrency, formatDate } from '@/lib/formatters.ts';
 import { Transaction } from '@/types';
 
-export function ListItem({ currency, onDelete, transaction }: {
+export function ListItem({ currency, transaction }: {
   currency: string;
   transaction: Transaction,
-  onDelete: (txId: string) => void
 }) {
   const getTransactionIcon = () => {
     if (transaction.category?.icon) return transaction.category.icon;
@@ -90,15 +89,7 @@ export function ListItem({ currency, onDelete, transaction }: {
         {getTransactionSign()}
         {formatCurrency(transaction.amount, transaction.account?.currency ?? currency)}
       </span>
-      <button
-        className="opacity-0 group-hover:opacity-100 transition-opacity text-white/20 hover:text-rose-400 ml-1 text-lg leading-none"
-        type="button"
-        onClick={() => {
-          onDelete(transaction.id);
-        }}
-      >
-        ×
-      </button>
+
     </div>
   );
 }

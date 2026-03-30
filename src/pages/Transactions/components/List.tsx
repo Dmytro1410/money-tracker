@@ -5,7 +5,7 @@ export interface ITransactionsListProps {
   currency: string,
   filteredTransactions: Transaction[],
   isLoading: boolean,
-  onDelete: (txId: string) => void,
+  // onDelete: (txId: string) => void,
   onShowAdd: () => void,
   search: string,
 }
@@ -14,7 +14,7 @@ export function List({
   currency,
   filteredTransactions,
   isLoading,
-  onDelete,
+  // onDelete,
   onShowAdd,
   search,
 }: ITransactionsListProps) {
@@ -25,7 +25,7 @@ export function List({
       className="card-dark divide-y divide-white/5 overflow-y-auto max-h-[calc(100vh_-_400px)] xl:max-h-[calc(100vh_-_300px)]"
     >
       {filteredTransactions.map((tx) => (
-        <ListItem currency={currency} transaction={tx} onDelete={onDelete} />
+        <ListItem currency={currency} transaction={tx} />
       ))}
       {filteredTransactions.length === 0 && (
         <div className="text-center py-12">

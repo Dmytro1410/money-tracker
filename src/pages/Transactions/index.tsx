@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useAuthStore, useUIStore } from '@/stores';
-import { useDeleteTransaction, useTransactions } from '@/hooks';
+import { useTransactions } from '@/hooks';
 import Modal from '@/components/ui/Modal';
 import AddTransactionForm from '@/components/forms/Transactions';
 import type { TransactionFilter } from '@/types';
@@ -15,7 +15,7 @@ export default function Transactions() {
   const [search, setSearch] = useState('');
 
   const { data: transactions = [], isLoading } = useTransactions(year, month);
-  const deleteTx = useDeleteTransaction();
+  // const deleteTx = useDeleteTransaction();
 
   const filtered = useMemo(() => transactions.filter((tx) => {
     if (filter !== 'all' && tx.type !== filter) return false;
@@ -26,9 +26,9 @@ export default function Transactions() {
   const totalIncome = useMemo(() => filtered.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0), [filtered]);
   const totalExpense = useMemo(() => filtered.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0), [filtered]);
 
-  const handleOnDeleteTransaction = (id: string) => {
-    deleteTx.mutate(id);
-  };
+  // const handleOnDeleteTransaction = (id: string) => {
+  //   deleteTx.mutate(id);
+  // };
 
   const handleOnShowAdd = () => {
     setShowAdd(true);
@@ -56,7 +56,6 @@ export default function Transactions() {
         search={search}
         totalExpense={totalExpense}
         totalIncome={totalIncome}
-        onDelete={handleOnDeleteTransaction}
         onFilter={handleOnFilter}
         onSearch={handleOnSearch}
         onShowAdd={handleOnShowAdd}

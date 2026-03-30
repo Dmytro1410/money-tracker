@@ -36,7 +36,7 @@ export default function Modal({
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
       <div
         className={clsx(
-          'relative z-10 w-full rounded-2xl lg:rounded-3xl bg-night-800 shadow-2xl h-full',
+          'relative z-10 w-full rounded-2xl lg:rounded-3xl bg-night-800 shadow-2xl h-svh overflow-y-auto',
           width === 'sm' && 'max-w-sm',
           width === 'md' && 'max-w-md',
           width === 'lg' && 'max-w-lg',

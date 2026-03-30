@@ -141,7 +141,7 @@ export default function AddTransactionForm({ onClose }: Props) {
           <input
             autoFocus
             className="input text-xl font-800 pr-16"
-            inputMode="numeric"
+            inputMode="decimal"
             min="0"
             placeholder="0"
             type="number"
@@ -231,13 +231,12 @@ export default function AddTransactionForm({ onClose }: Props) {
         </div>
       )}
 
-      {/* Дата + Заметка */}
       <div className="grid grid-cols-2 gap-3">
-        <div>
+        <div className="w-full">
           <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">Date</label>
           <input className="input" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </div>
-        <div>
+        <div className="w-full">
           <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">Note</label>
           <input className="input" placeholder="optional" value={note} onChange={(e) => setNote(e.target.value)} />
         </div>
