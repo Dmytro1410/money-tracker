@@ -21,7 +21,9 @@ export function List({
   return isLoading ? (
     <p className="text-white/30 text-sm text-center py-10">Загрузка…</p>
   ) : (
-    <div className="card-dark divide-y divide-white/5">
+    <div
+      className="card-dark divide-y divide-white/5 overflow-y-auto max-h-[calc(100vh_-_400px)] xl:max-h-[calc(100vh_-_300px)]"
+    >
       {filteredTransactions.map((tx) => (
         <ListItem currency={currency} transaction={tx} onDelete={onDelete} />
       ))}

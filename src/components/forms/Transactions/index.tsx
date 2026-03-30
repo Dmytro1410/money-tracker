@@ -141,6 +141,7 @@ export default function AddTransactionForm({ onClose }: Props) {
           <input
             autoFocus
             className="input text-xl font-800 pr-16"
+            inputMode="numeric"
             min="0"
             placeholder="0"
             type="number"
@@ -183,7 +184,7 @@ export default function AddTransactionForm({ onClose }: Props) {
         <div className="space-y-3">
           <div>
             <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">Category</label>
-            <div className="grid grid-cols-8 gap-1.5 max-h-40 overflow-y-auto pr-0.5">
+            <div className="grid grid-cols-4 xl:grid-cols-8 gap-1.5 max-h-40 overflow-y-auto pr-0.5">
               {parents.map((cat) => (
                 <button
                   key={cat.id}
@@ -208,7 +209,7 @@ export default function AddTransactionForm({ onClose }: Props) {
                 Subcategory
                 <span className="text-white/20 normal-case tracking-normal" />
               </label>
-              <div className="grid grid-cols-8 gap-1.5">
+              <div className="grid grid-cols-4 xl:grid-cols-8 gap-1.5">
                 {subCategories.map((sub) => (
                   <button
                     key={sub.id}

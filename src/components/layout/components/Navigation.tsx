@@ -124,11 +124,23 @@ const NAV = [
   },
 ];
 
-export function Navigation() {
+export function Navigation({ onCloseSideBar }: { onCloseSideBar?: () => void }) {
   return (
-    <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+    <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto pb-4">
       {NAV.map(({ icon, label, to }) => (
-        <NavLink key={to} className={({ isActive }) => clsx('nav-item', isActive && 'active')} to={to}>
+        <NavLink
+          key={to}
+          className={({ isActive }) => clsx(
+            'flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all duration-150 cursor-pointer',
+            isActive
+              ? 'text-ink-800 bg-lime font-700'
+              : 'text-white/40 hover:text-white/70 hover:bg-white/5 font-600',
+          )}
+          to={to}
+          onClick={() => {
+            if (onCloseSideBar) onCloseSideBar();
+          }}
+        >
           <span className="flex-shrink-0">{icon}</span>
           <span>{label}</span>
         </NavLink>

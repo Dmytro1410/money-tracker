@@ -4,7 +4,7 @@ export interface ITransactionsHeaderProps {
 
 export function Header({ onShowAdd }: ITransactionsHeaderProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between h-10">
       <h1 className="header-main">Transactions</h1>
       <button className="btn-primary" type="button" onClick={onShowAdd}>
         <svg

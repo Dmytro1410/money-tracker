@@ -1,6 +1,6 @@
 export function LogoContainer() {
   return (
-    <div className="flex items-center gap-3 px-5 h-16 border-b border-white/5">
+    <div className="flex items-center gap-3 xl:px-5 h-16 border-b border-white/5">
       <div className="w-8 h-8 rounded-xl bg-violet-500 flex items-center justify-center flex-shrink-0">
         <svg
           fill="none"
