@@ -231,7 +231,7 @@ export default function AddTransactionForm({ onClose }: Props) {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
         <div className="w-full">
           <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">Date</label>
           <input className="input" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
