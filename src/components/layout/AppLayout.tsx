@@ -16,10 +16,10 @@ export default function AppLayout() {
   }, [sidebarOpen]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-ink-800">
+    <div className="flex h-screen overflow-hidden bg-night-800">
 
       {/* Desktop */}
-      <aside className="hidden xl:flex flex-col w-56 bg-ink-900 border-r border-white/5 flex-shrink-0">
+      <aside className="hidden xl:flex flex-col w-56 bg-night-900 border-r border-white/5 flex-shrink-0">
         <LogoContainer />
         <Navigation />
         <UserSettings />
@@ -34,12 +34,12 @@ export default function AppLayout() {
       )}
       <aside className={clsx(
         'xl:hidden fixed inset-y-0 left-0 z-50 w-72 flex flex-col',
-        'bg-ink-900 border-r border-white/5',
+        'bg-night-900 border-r border-white/5',
         'transition-transform duration-300 ease-in-out',
         sidebarOpen ? 'translate-x-0' : '-translate-x-full',
       )}
       >
-        <LogoContainer />
+        <div className="px-5"><LogoContainer /></div>
         <Navigation onCloseSideBar={() => {
           setSidebarOpen(false);
         }}
@@ -50,7 +50,7 @@ export default function AppLayout() {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
         <header
-          className="xl:hidden flex items-center justify-between px-4 h-14 bg-ink-900 border-b border-white/5 flex-shrink-0"
+          className="xl:hidden flex items-center justify-between px-4 h-14 bg-night-900 border-b border-white/5 flex-shrink-0"
         >
           <LogoContainer />
           <button
@@ -74,7 +74,7 @@ export default function AppLayout() {
           </button>
         </header>
 
-        <main className="flex-1 overflow-y-auto bg-ink-800">
+        <main className="flex-1 overflow-y-auto bg-night-900">
           <Outlet />
         </main>
       </div>

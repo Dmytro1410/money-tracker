@@ -164,7 +164,7 @@ export default function Categories() {
       </div>
 
       {/* Type tabs */}
-      <div className="flex rounded-xl overflow-hidden border border-white/8 bg-ink-700 self-start w-fit">
+      <div className="flex rounded-xl overflow-hidden border border-white/8 bg-night-700 self-start w-fit">
         {TYPES.map((t) => (
           <button
             key={t.value}
@@ -405,7 +405,7 @@ export default function Categories() {
           {!form.parent_id && !editing && (
             <div>
               <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">Тип</label>
-              <div className="flex rounded-xl overflow-hidden border border-white/8 bg-ink-700">
+              <div className="flex rounded-xl overflow-hidden border border-white/8 bg-night-700">
                 {TYPES.map((t) => (
                   <button
                     key={t.value}
@@ -441,7 +441,7 @@ export default function Categories() {
               <span className="text-white normal-case tracking-normal">{form.icon}</span>
             </label>
             <div
-              className="grid grid-cols-10 gap-1 max-h-32 overflow-y-auto p-1 rounded-xl border border-white/8 bg-ink-700"
+              className="grid grid-cols-10 gap-1 max-h-32 overflow-y-auto p-1 rounded-xl border border-white/8 bg-night-700"
             >
               {ICONS.map((ico) => (
                 <button

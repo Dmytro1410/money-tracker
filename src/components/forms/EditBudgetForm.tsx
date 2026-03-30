@@ -84,7 +84,7 @@ export function EditBudgetForm({
       {/* Период */}
       <div>
         <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">Период</label>
-        <div className="flex rounded-xl overflow-hidden border border-white/8 bg-ink-700">
+        <div className="flex rounded-xl overflow-hidden border border-white/8 bg-night-700">
           {PERIODS.map((p) => (
             <button
               key={p.value}
@@ -103,7 +103,7 @@ export function EditBudgetForm({
       {!editId && (
         <div>
           <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">Категория</label>
-          <div className="rounded-xl border border-white/8 bg-ink-700 max-h-52 overflow-y-auto">
+          <div className="rounded-xl border border-white/8 bg-night-700 max-h-52 overflow-y-auto">
             {parents.map((parent) => {
               const subs = children.filter((c) => c.parent_id === parent.id);
               return (
