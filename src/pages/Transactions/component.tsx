@@ -32,7 +32,7 @@ export function TransactionsComponent({
   totalIncome,
 }: ITransactionsComponentProps) {
   return (
-    <div className="p-7 space-y-6">
+    <div className="p-4 lg:p-7 space-y-6 overflow-hidden h-full">
       <Header onShowAdd={onShowAdd} />
       <Summary currency={currency} totalExpense={totalExpense} totalIncome={totalIncome} />
 
