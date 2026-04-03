@@ -10,7 +10,7 @@ export function Summary({ currency, totalExpense, totalIncome }: ITransactionsSu
   return (
     <div className="grid grid-cols-2 gap-3 h-20">
       <div className="card-dark p-4">
-        <p className="text-xs text-white/30 mb-1">Доходы за период</p>
+        <p className="text-xs text-white/30 mb-1">Income for the period</p>
         <p
           className="font-display text-xl font-semibold text-emerald-400"
         >
@@ -19,7 +19,7 @@ export function Summary({ currency, totalExpense, totalIncome }: ITransactionsSu
         </p>
       </div>
       <div className="card-dark p-4">
-        <p className="text-xs text-white/30 mb-1">Расходы за период</p>
+        <p className="text-xs text-white/30 mb-1">Expenses for the period</p>
         <p className="font-display text-xl font-semibold text-white/70">
           −
           {formatCurrency(totalExpense, currency)}

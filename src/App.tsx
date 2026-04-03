@@ -12,6 +12,7 @@ import Analytics from '@/pages/Analytics';
 import Accounts from '@/pages/Accounts';
 import Login from '@/pages/Login';
 import Categories from '@/pages/Categories';
+import { RouteNames } from '@/constants.ts';
 
 export default function App() {
   const { profile, setProfile } = useAuthStore();
@@ -101,13 +102,13 @@ export default function App() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route index element={<Navigate replace to="/dashboard" />} />
-        <Route element={<Dashboard />} path="dashboard" />
-        <Route element={<Transactions />} path="transactions" />
-        <Route element={<Budgets />} path="budgets" />
-        <Route element={<Analytics />} path="analytics" />
-        <Route element={<Accounts />} path="accounts" />
-        <Route element={<Categories />} path="categories" />
+        <Route index element={<Navigate replace to={RouteNames.Dashboard} />} />
+        <Route element={<Dashboard />} path={RouteNames.Dashboard} />
+        <Route element={<Transactions />} path={RouteNames.Transactions} />
+        <Route element={<Budgets />} path={RouteNames.Budgets} />
+        <Route element={<Analytics />} path={RouteNames.Analytics} />
+        <Route element={<Accounts />} path={RouteNames.Accounts} />
+        <Route element={<Categories />} path={RouteNames.Categories} />
       </Route>
       <Route element={<Navigate replace to="/dashboard" />} path="*" />
     </Routes>

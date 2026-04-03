@@ -8,10 +8,10 @@ export interface ITransactionsFiltersProps {
 }
 
 const FILTERS: { value: TransactionFilter; label: string }[] = [
-  { value: 'all', label: 'Все' },
-  { value: 'income', label: 'Доходы' },
-  { value: 'expense', label: 'Расходы' },
-  { value: 'transfer', label: 'Переводы' },
+  { value: 'all', label: 'All' },
+  { value: 'income', label: 'Income' },
+  { value: 'expense', label: 'Expense' },
+  { value: 'transfer', label: 'Transfer' },
 ];
 
 export function Filters({
@@ -24,7 +24,7 @@ export function Filters({
     <div className="flex justify-between flex-wrap space-y-6 xl:space-y-0 h-26 xl:h-10">
       <input
         className="input xl:max-w-xs "
-        placeholder="Поиск…"
+        placeholder="Search…"
         value={search}
         onChange={(e) => {
           onSearch(e.target.value);
