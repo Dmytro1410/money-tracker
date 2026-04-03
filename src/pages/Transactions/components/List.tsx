@@ -1,22 +1,14 @@
-import { Transaction } from '@/types';
 import { ListItem } from '@/pages/Transactions/components/ListItem.tsx';
 import { Spinner } from '@/components/Spinner.tsx';
-
-export interface ITransactionsListProps {
-  currency: string,
-  filteredTransactions: Transaction[],
-  isLoading: boolean,
-  onShowAdd: () => void,
-  search: string,
-}
+import { ITransactionsPageListProps } from '@/models/Transactions.ts';
 
 export function List({
   currency,
   filteredTransactions,
   isLoading,
-  onShowAdd,
+  onShowTxModal,
   search,
-}: ITransactionsListProps) {
+}: ITransactionsPageListProps) {
   return isLoading ? (
     <div className="w-full h-full max-h-[calc(100vh_-_400px)] xl:max-h-[calc(100vh_-_300px)]"><Spinner withText /></div>
   ) : (
@@ -24,7 +16,12 @@ export function List({
       className="card-dark divide-y divide-white/5 overflow-y-auto max-h-[calc(100vh_-_400px)] xl:max-h-[calc(100vh_-_300px)]"
     >
       {filteredTransactions.map((tx) => (
-        <ListItem currency={currency} transaction={tx} />
+        <ListItem
+          key={tx.id}
+          currency={currency}
+          transaction={tx}
+          onClick={onShowTxModal}
+        />
       ))}
       {filteredTransactions.length === 0 && (
         <div className="text-center py-12">
@@ -33,7 +30,9 @@ export function List({
             <button
               className="mt-3 text-violet-400 text-sm hover:text-violet-300 transition-colors"
               type="button"
-              onClick={onShowAdd}
+              onClick={() => {
+                onShowTxModal();
+              }}
             >
               Add new →
             </button>

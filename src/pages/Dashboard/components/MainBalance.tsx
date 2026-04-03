@@ -1,5 +1,6 @@
 import { formatCurrency } from '@/lib/formatters.ts';
-import { Account, Transaction } from '@/types';
+import { Account } from '@/models/common.ts';
+import { ITransaction } from '@/models/Transactions.ts';
 
 export function MainBalance({
   accounts, currency, monthExpense, monthIncome, totalBalance, transactions,
@@ -9,7 +10,7 @@ export function MainBalance({
   monthExpense: number
   monthIncome: number,
   totalBalance: number,
-  transactions: Transaction[],
+  transactions: ITransaction[],
 }) {
   return (
     <div className="grid grid-cols-3 gap-6">

@@ -1,4 +1,4 @@
-import { Account } from '@/types';
+import { Account } from '@/models/common.ts';
 import { Header } from '@/pages/Accounts/components/Header.tsx';
 import { AccountItem } from '@/pages/Accounts/components/AccountItem.tsx';
 

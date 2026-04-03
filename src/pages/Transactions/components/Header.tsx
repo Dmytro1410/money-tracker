@@ -1,16 +1,19 @@
 import { DatePicker } from '@/components/DatePicker';
+import { ITransactionsPageHeaderProps } from '@/models/Transactions.ts';
 
-export interface ITransactionsHeaderProps {
-  onShowAdd: () => void
-}
-
-export function Header({ onShowAdd }: ITransactionsHeaderProps) {
+export function Header({ onShowTxModal }: ITransactionsPageHeaderProps) {
   return (
     <div className="flex items-center justify-between h-10">
       <h1 className="header-main">Transactions</h1>
       <div className="flex items-center gap-8">
         <div className="hidden xl:block"><DatePicker /></div>
-        <button className="btn-primary" type="button" onClick={onShowAdd}>
+        <button
+          className="btn-primary"
+          type="button"
+          onClick={() => {
+            onShowTxModal();
+          }}
+        >
           <svg
             fill="none"
             height="14"

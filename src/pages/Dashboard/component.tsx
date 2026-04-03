@@ -1,9 +1,10 @@
 import { Header } from '@/pages/Dashboard/components/Header.tsx';
 import { MainBalance } from '@/pages/Dashboard/components/MainBalance.tsx';
-import { Account, Budget, Transaction } from '@/types';
+import { Account, Budget } from '@/models/common.ts';
 import { Accounts } from '@/pages/Dashboard/components/Accounts.tsx';
 import { Budgets } from '@/pages/Dashboard/components/Budgets.tsx';
 import { RecentTransactions } from '@/pages/Dashboard/components/RecentTransactions.tsx';
+import { ITransaction } from '@/models/Transactions.ts';
 
 export interface IDashboardComponentProps {
   accounts: Account[]
@@ -13,7 +14,7 @@ export interface IDashboardComponentProps {
   monthExpense: number;
   monthIncome: number;
   totalBalance: number;
-  transactions: Transaction[];
+  transactions: ITransaction[];
 }
 
 export function DashboardComponent({

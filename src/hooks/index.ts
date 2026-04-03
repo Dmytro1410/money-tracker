@@ -1,16 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import type {
-  Account,
-  AccountType,
-  Budget,
-  BudgetPeriod,
-  Category,
-  PeriodSummary,
-  RecurRule,
-  Transaction,
-  TransactionType,
-} from '@/types';
+  Account, AccountType, Budget, BudgetPeriod, Category, PeriodSummary, RecurRule,
+} from '@/models/common.ts';
+import { ITransaction } from '@/models/Transactions.ts';
+import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 // ─── Payload types ────────────────────────────────────────────
 export type AddAccountPayload = {
@@ -36,7 +30,7 @@ export type SubmitTransactionPayload = {
   tags: string[]
   to_account_id?: string
   to_account_name?: string
-  type: TransactionType
+  type: TRANSACTION_TYPES
 }
 
 export type AddBudgetPayload = {
@@ -66,7 +60,7 @@ export type SaveCategoryPayload = {
   icon: string
   name: string
   parent_id: string | null
-  type: TransactionType
+  type: TRANSACTION_TYPES
   user_id: string
 }
 
@@ -75,8 +69,10 @@ export function useTransactions(year: number, month: number) {
   return useQuery({
     queryKey: ['transactions', year, month],
     queryFn: async () => {
-      const from = `${year}-${String(month).padStart(2, '0')}-01`;
-      const to = `${year}-${String(month).padStart(2, '0')}-31`;
+      const firstDay = new Date(year, month - 1, 1);
+      const lastDay = new Date(year, month, 0);
+      const from = `${year}-${String(month).padStart(2, '0')}-${firstDay.getDate()}`;
+      const to = `${year}-${String(month).padStart(2, '0')}-${lastDay.getDate()}`;
       const { data, error } = await supabase
         .from('transactions')
         .select(`*,
@@ -87,7 +83,7 @@ export function useTransactions(year: number, month: number) {
         .order('date', { ascending: false });
       if (error) throw error;
 
-      const all = data as Transaction[];
+      const all = data as ITransaction[];
 
       // Схлопываем пары трансферов в одну строку — оставляем только списание
       // (transfer_to_account_id !== account_id)
@@ -106,10 +102,10 @@ export function useTransactions(year: number, month: number) {
 export function useAddTransaction() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (tx: Omit<Transaction, 'id' | 'created_at' | 'account' | 'category'>) => {
+    mutationFn: async (tx: Omit<ITransaction, 'id' | 'created_at' | 'account' | 'category'>) => {
       const { data, error } = await supabase.from('transactions').insert(tx).select().single();
       if (error) throw error;
-      return data as Transaction;
+      return data as ITransaction;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['transactions'] });
@@ -160,7 +156,7 @@ export function useAddAccount() {
 }
 
 // ─── Categories ──────────────────────────────────────────────
-export function useCategories(type: 'income' | 'expense' | 'transfer') {
+export function useCategories(type: TRANSACTION_TYPES) {
   return useQuery({
     queryKey: ['categories', type],
     queryFn: async () => {
@@ -415,7 +411,7 @@ export function useAnalytics(year: number, month: number) {
         .in('type', ['income', 'expense']);
 
       if (error) throw error;
-      const txs = data as Transaction[];
+      const txs = data as ITransaction[];
 
       const income = txs.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
       const expense = txs.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);

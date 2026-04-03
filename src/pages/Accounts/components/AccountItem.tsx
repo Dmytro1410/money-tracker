@@ -1,5 +1,5 @@
 import { creditUsagePercent, formatCurrency } from '@/lib/formatters.ts';
-import { Account } from '@/types';
+import { Account } from '@/models/common.ts';
 
 const TYPE_LABELS: Record<string, string> = {
   bank: 'Банковский счёт', card: 'Кредитная карта', cash: 'Наличные', deposit: 'Вклад',

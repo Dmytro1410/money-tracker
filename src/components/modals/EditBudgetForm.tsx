@@ -1,9 +1,10 @@
 import { useAuthStore, useUIStore } from '@/stores';
-import { BudgetPeriod } from '@/types';
+import { BudgetPeriod } from '@/models/common.ts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useCategories } from '@/hooks';
 import { supabase } from '@/lib/supabase.ts';
+import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 const PERIODS: { value: BudgetPeriod; label: string }[] = [
   { value: 'month', label: 'Месяц' },
@@ -29,7 +30,7 @@ export function EditBudgetForm({
   const [period, setPeriod] = useState<BudgetPeriod>(editPeriod ?? 'month');
   const [error, setError] = useState<string | null>(null);
 
-  const { data: catData } = useCategories('expense');
+  const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
   const allCats = catData?.all ?? [];
   const parents = catData?.parents ?? [];
   const children = catData?.children ?? [];

@@ -1,19 +1,17 @@
 import { formatCurrency, formatDate } from '@/lib/formatters.ts';
-import { Transaction } from '@/types';
+import { ITransactionsPageListItemProps } from '@/models/Transactions.ts';
+import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
-export function ListItem({ currency, transaction }: {
-  currency: string;
-  transaction: Transaction,
-}) {
+export function ListItem({ currency, onClick, transaction }: ITransactionsPageListItemProps) {
   const getTransactionIcon = () => {
     if (transaction.category?.icon) return transaction.category.icon;
 
     switch (transaction.type) {
-      case 'income':
+      case TRANSACTION_TYPES.INCOME:
         return '↑';
-      case 'expense':
+      case TRANSACTION_TYPES.EXPENSE:
         return '↓';
-      case 'transfer':
+      case TRANSACTION_TYPES.TRANSFER:
         return '↔';
       default:
         return undefined;
@@ -22,11 +20,11 @@ export function ListItem({ currency, transaction }: {
 
   const getTransactionSign = () => {
     switch (transaction.type) {
-      case 'income':
+      case TRANSACTION_TYPES.INCOME:
         return '+';
-      case 'expense':
+      case TRANSACTION_TYPES.EXPENSE:
         return '−';
-      case 'transfer':
+      case TRANSACTION_TYPES.TRANSFER:
         return '↔';
       default:
         return undefined;
@@ -35,18 +33,18 @@ export function ListItem({ currency, transaction }: {
 
   const getTransactionClassname = () => {
     switch (transaction.type) {
-      case 'income':
+      case TRANSACTION_TYPES.INCOME:
         return 'amount-income';
-      case 'transfer':
+      case TRANSACTION_TYPES.TRANSFER:
         return 'amount-transfer';
-      case 'expense':
+      case TRANSACTION_TYPES.EXPENSE:
       default:
         return 'amount-expense';
     }
   };
 
   const getTransactionMessage = () => {
-    if (transaction.type === 'transfer') return `${transaction.account?.name} ↔ ${transaction.to_account?.name}`;
+    if (transaction.type === TRANSACTION_TYPES.TRANSFER) return `${transaction.account?.name} ↔ ${transaction.to_account?.name}`;
 
     return `${transaction.category?.name}${transaction.note ? `-${transaction.note}` : ''}`;
   };
@@ -54,6 +52,7 @@ export function ListItem({ currency, transaction }: {
     <div
       key={transaction.id}
       className="flex items-center gap-3 px-4 py-3 group hover:bg-white/3 transition-colors"
+      onClick={() => onClick(transaction)}
     >
       <div
         className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"

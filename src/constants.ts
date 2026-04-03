@@ -1,3 +1,4 @@
+// App routes
 export enum RouteNames {
   Accounts = '/accounts',
   Analytics = '/analytics',
