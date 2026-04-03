@@ -1,4 +1,4 @@
-import { Account } from '@/types';
+import { Account } from '@/models/common.ts';
 import { formatCurrency } from '@/lib/formatters.ts';
 import '../styles.css';
 

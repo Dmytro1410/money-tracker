@@ -1,10 +1,10 @@
-import { Transaction } from '@/types';
 import { formatCurrency, formatDate } from '@/lib/formatters.ts';
+import { ITransaction } from '@/models/Transactions.ts';
 
 export function RecentTransactions({
   currency,
   transactions,
-}: { transactions: Transaction[], currency: string }) {
+}: { transactions: ITransaction[], currency: string }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-3">

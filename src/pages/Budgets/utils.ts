@@ -1,4 +1,4 @@
-import { Budget, Category } from '@/types';
+import { Budget, Category } from '@/models/common.ts';
 
 export const getBudgets = ({ budgets, categories }: {
   budgets: Budget[];

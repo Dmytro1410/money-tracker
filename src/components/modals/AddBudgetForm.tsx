@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase.ts';
 import { useAuthStore, useUIStore } from '@/stores';
 import { useCategories } from '@/hooks';
-import type { BudgetPeriod } from '@/types';
+import type { BudgetPeriod } from '@/models/common.ts';
 
 const PERIODS: { value: BudgetPeriod; label: string }[] = [
   { value: 'month', label: 'Месяц' },

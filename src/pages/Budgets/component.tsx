@@ -1,4 +1,4 @@
-import { Budget } from '@/types';
+import { Budget } from '@/models/common.ts';
 import { Header } from '@/pages/Budgets/components/Header.tsx';
 import { Summary } from '@/pages/Budgets/components/Summary.tsx';
 import { BudgetList } from '@/pages/Budgets/components/BudgetList';

@@ -1,6 +1,6 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import type { Profile } from '@/types'
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import type { Profile } from '@/models/common.ts';
 
 // ─── Auth store ──────────────────────────────────────────────────────
 interface AuthState {
@@ -16,7 +16,7 @@ export const useAuthStore = create<AuthState>()(
     }),
     { name: 'auth-store' },
   ),
-)
+);
 
 // ─── UI store ────────────────────────────────────────────────────────
 interface UIState {
@@ -27,7 +27,7 @@ interface UIState {
   setMonth: (year: number, month: number) => void
 }
 
-const now = new Date()
+const now = new Date();
 
 export const useUIStore = create<UIState>()((set) => ({
   sidebarOpen: true,
@@ -35,7 +35,7 @@ export const useUIStore = create<UIState>()((set) => ({
   selectedMonth: now.getMonth() + 1,
   toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
   setMonth: (year, month) => set({ selectedYear: year, selectedMonth: month }),
-}))
+}));
 
 // ─── Budget store ────────────────────────────────────────────────────
 // Хранит локальные оптимистичные обновления бюджетов
@@ -47,12 +47,10 @@ interface BudgetState {
 
 export const useBudgetStore = create<BudgetState>()((set) => ({
   pendingBudgetIds: new Set(),
-  markPending: (id) =>
-    set((s) => ({ pendingBudgetIds: new Set(s.pendingBudgetIds).add(id) })),
-  clearPending: (id) =>
-    set((s) => {
-      const next = new Set(s.pendingBudgetIds)
-      next.delete(id)
-      return { pendingBudgetIds: next }
-    }),
-}))
+  markPending: (id) => set((s) => ({ pendingBudgetIds: new Set(s.pendingBudgetIds).add(id) })),
+  clearPending: (id) => set((s) => {
+    const next = new Set(s.pendingBudgetIds);
+    next.delete(id);
+    return { pendingBudgetIds: next };
+  }),
+}));

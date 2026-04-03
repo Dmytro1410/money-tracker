@@ -1,25 +1,9 @@
-import { TransactionFilter } from '@/types';
-
-export interface ITransactionsFiltersProps {
-  filter: TransactionFilter;
-  onFilter: (f: TransactionFilter) => void;
-  onSearch: (s: string) => void;
-  search: string;
-}
-
-const FILTERS: { value: TransactionFilter; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'income', label: 'Income' },
-  { value: 'expense', label: 'Expense' },
-  { value: 'transfer', label: 'Transfer' },
-];
+import { ITransactionsPageFiltersProps } from '@/models/Transactions.ts';
+import { FILTERS } from '@/constants/Transactions.ts';
 
 export function Filters({
-  filter,
-  onFilter,
-  onSearch,
-  search,
-}: ITransactionsFiltersProps) {
+  filter, onFilter, onSearch, search,
+}: ITransactionsPageFiltersProps) {
   return (
     <div className="flex justify-between flex-wrap space-y-6 xl:space-y-0 h-26 xl:h-10">
       <input

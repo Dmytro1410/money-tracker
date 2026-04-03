@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAccounts } from '@/hooks';
 import { AccountsComponent } from '@/pages/Accounts/component.tsx';
-import AddAccountForm from '@/components/forms/Accounts';
+import AddAccountForm from '@/components/modals/Accounts';
 import Modal from '@/components/ui/Modal.tsx';
 import { getTotalBalance } from '@/pages/Accounts/utils.ts';
 

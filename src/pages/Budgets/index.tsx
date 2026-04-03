@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore, useUIStore } from '@/stores';
 import { useBudgets } from '@/hooks';
 import Modal from '@/components/ui/Modal';
-import AddBudgetForm from '@/components/forms/AddBudgetForm';
+import AddBudgetForm from '@/components/modals/AddBudgetForm.tsx';
 import { BudgetsComponent } from '@/pages/Budgets/component.tsx';
 import { getTotalLimit, getTotalPct, getTotalSpent } from '@/pages/Budgets/utils.ts';
 

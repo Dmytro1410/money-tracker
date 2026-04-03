@@ -1,10 +1,7 @@
 import { DatePicker } from '@/components/DatePicker';
+import { ITransactionsPageHeaderProps } from '@/models/Transactions.ts';
 
-export interface ITransactionsHeaderProps {
-  onShowAdd: () => void
-}
-
-export function Header({ onShowAdd }: ITransactionsHeaderProps) {
+export function Header({ onShowAdd }: ITransactionsPageHeaderProps) {
   return (
     <div className="flex items-center justify-between h-10">
       <h1 className="header-main">Transactions</h1>

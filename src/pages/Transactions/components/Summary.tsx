@@ -1,12 +1,7 @@
 import { formatCurrency } from '@/lib/formatters.ts';
+import { ITransactionsPageSummaryProps } from '@/models/Transactions.ts';
 
-export interface ITransactionsSummaryProps {
-  currency: string;
-  totalExpense: number;
-  totalIncome: number;
-}
-
-export function Summary({ currency, totalExpense, totalIncome }: ITransactionsSummaryProps) {
+export function Summary({ currency, totalExpense, totalIncome }: ITransactionsPageSummaryProps) {
   return (
     <div className="grid grid-cols-2 gap-3 h-20">
       <div className="card-dark p-4">

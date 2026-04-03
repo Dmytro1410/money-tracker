@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores';
-import type { Category, TransactionType } from '@/types';
+import type { Category, TransactionType } from '@/models/common.ts';
 import Modal from '@/components/ui/Modal';
 
 const TYPES: { value: TransactionType; label: string }[] = [

@@ -1,4 +1,4 @@
-import { Budget } from '@/types';
+import { Budget } from '@/models/common.ts';
 import { formatCurrency } from '@/lib/formatters.ts';
 import '../styles.css';
 import { getPct, sortByLeftover } from '@/pages/Dashboard/utils.ts';

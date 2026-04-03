@@ -1,4 +1,4 @@
-import { AccountType } from '@/types';
+import { AccountType } from '@/models/common.ts';
 
 export interface IAccountsFormProps {
   balance: string;

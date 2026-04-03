@@ -1,4 +1,6 @@
 // ─── Пользователь / семья ────────────────────────────────────────────
+import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
+
 export interface Profile {
   id: string
   email: string
@@ -37,7 +39,6 @@ export interface Account {
 }
 
 // ─── Категории ───────────────────────────────────────────────────────
-export type TransactionType = 'income' | 'expense' | 'transfer'
 
 export interface Category {
   id: string
@@ -45,36 +46,13 @@ export interface Category {
   name: string
   icon: string
   color: string
-  type: TransactionType
+  type: TRANSACTION_TYPES
   parent_id: string | null
   is_system: boolean
 }
 
 // ─── Транзакции ──────────────────────────────────────────────────────
 export type RecurRule = 'daily' | 'weekly' | 'monthly' | 'yearly'
-
-export interface Transaction {
-  id: string
-  account_id: string
-  category_id: string | null
-  amount: number
-  type: TransactionType
-  date: string
-  note: string | null
-  tags: string[]
-  is_recurring: boolean
-  recur_rule: RecurRule | null
-  recur_end_date: string | null
-  imported_hash: string | null
-  // Трансфер
-  transfer_to_account_id: string | null // id счёта-получателя
-  transfer_pair_id: string | null // id парной транзакции (для авто-удаления)
-  created_at: string
-  // joined
-  account?: Pick<Account, 'id' | 'name' | 'currency' | 'color'>
-  to_account?: Pick<Account, 'id' | 'name' | 'currency' | 'color'> // счёт-получатель
-  category?: Pick<Category, 'id' | 'name' | 'icon' | 'color'>
-}
 
 // ─── Бюджеты ─────────────────────────────────────────────────────────
 export type BudgetPeriod = 'month' | 'quarter' | 'year'
@@ -144,8 +122,6 @@ export type ModalWidth =
   | '4xl' | '5xl' | '6xl' | '7xl' | '8xl' | '9xl' | '10xl'
 
 export type SortOrder = 'asc' | 'desc'
-
-export type TransactionFilter = TransactionType | 'all'
 
 export interface ModalProps {
   children: React.ReactNode

@@ -1,5 +1,5 @@
 import { useAuthStore, useUIStore } from '@/stores';
-import { BudgetPeriod } from '@/types';
+import { BudgetPeriod } from '@/models/common.ts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useCategories } from '@/hooks';

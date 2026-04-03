@@ -1,4 +1,4 @@
-import { Budget } from '@/types';
+import { Budget } from '@/models/common.ts';
 import { ListItem } from '@/pages/Budgets/components/BudgetList/ListItem.tsx';
 
 export interface IChildBudgetProps {
