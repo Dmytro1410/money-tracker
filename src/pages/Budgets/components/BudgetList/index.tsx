@@ -4,6 +4,7 @@ import { ParentBudget } from '@/pages/Budgets/components/BudgetList/ParentBudget
 import { useState } from 'react';
 import Modal from '@/components/ui/Modal.tsx';
 import { EditBudgetForm } from '@/components/modals/EditBudgetForm.tsx';
+import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 export interface IBudgetsListProps {
   budgets: { all: Budget[], childBudgets: Budget[], parentBudgets: Budget[] };
@@ -20,7 +21,7 @@ export function BudgetList({
   onDeleteBudget,
   onShowAdd,
 }: IBudgetsListProps) {
-  const { data: catData } = useCategories('expense');
+  const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
   const categories = catData?.all ?? [];
 
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());

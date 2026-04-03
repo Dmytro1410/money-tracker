@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import type { TransactionType } from '@/models/common.ts';
+import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 interface SubmitParams {
-  type: TransactionType
+  type: TRANSACTION_TYPES
   amount: string
   accountId: string
   toAccountId: string
@@ -21,7 +21,6 @@ export function useAddTransaction(_onSuccess?: () => void) {
       const {
         accountId, amount, categoryId, date, note, tags, toAccountId, type,
       } = payload;
-      debugger;
 
       const parsed = parseFloat(amount);
       if (Number.isNaN(parsed) || parsed <= 0) throw new Error('Please enter the correct amount');

@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores';
-import type { Category, TransactionType } from '@/models/common.ts';
+import type { Category } from '@/models/common.ts';
 import Modal from '@/components/ui/Modal';
+import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
-const TYPES: { value: TransactionType; label: string }[] = [
-  { value: 'expense', label: 'Расходы' },
-  { value: 'income', label: 'Доходы' },
+const TYPES: { value: TRANSACTION_TYPES; label: string }[] = [
+  { value: TRANSACTION_TYPES.EXPENSE, label: 'Расходы' },
+  { value: TRANSACTION_TYPES.INCOME, label: 'Доходы' },
 ];
 
 const ICONS = [
@@ -27,19 +28,19 @@ interface CategoryFormData {
   name: string
   icon: string
   color: string
-  type: TransactionType
+  type: TRANSACTION_TYPES
   parent_id: string | null
 }
 
 const EMPTY_FORM: CategoryFormData = {
-  name: '', icon: '📦', color: '#CFF008', type: 'expense', parent_id: null,
+  name: '', icon: '📦', color: '#CFF008', type: TRANSACTION_TYPES.EXPENSE, parent_id: null,
 };
 
 export default function Categories() {
   const profile = useAuthStore((s) => s.profile);
   const qc = useQueryClient();
 
-  const [activeType, setActiveType] = useState<TransactionType>('expense');
+  const [activeType, setActiveType] = useState<TRANSACTION_TYPES>(TRANSACTION_TYPES.EXPENSE);
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
   const [form, setForm] = useState<CategoryFormData>(EMPTY_FORM);
