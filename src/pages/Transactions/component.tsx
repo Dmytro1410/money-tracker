@@ -11,14 +11,14 @@ export function TransactionsComponent({
   isLoading,
   onFilter,
   onSearch,
-  onShowAdd,
+  onShowTxModal,
   search,
   totalExpense,
   totalIncome,
 }: ITransactionsPageComponentProps) {
   return (
     <div className="p-4 lg:p-7 space-y-6 overflow-hidden h-full">
-      <Header onShowAdd={onShowAdd} />
+      <Header onShowTxModal={onShowTxModal} />
       <Summary currency={currency} totalExpense={totalExpense} totalIncome={totalIncome} />
 
       <Filters filter={filter} search={search} onFilter={onFilter} onSearch={onSearch} />
@@ -27,7 +27,7 @@ export function TransactionsComponent({
         filteredTransactions={filteredTransactions}
         isLoading={isLoading}
         search={search}
-        onShowAdd={onShowAdd}
+        onShowTxModal={onShowTxModal}
       />
     </div>
   );

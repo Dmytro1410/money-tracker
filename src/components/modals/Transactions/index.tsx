@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAccounts, useCategories } from '@/hooks';
 import { TransactionsModalComponent } from '@/components/modals/Transactions/component.tsx';
-import { useAddTransaction } from '@/hooks/Transactions.ts';
+import useUpdateTransactionMutation, { useAddTransaction } from '@/hooks/Transactions.ts';
 import { TABS, TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { ITransactionFormProps } from '@/models/Transactions.ts';
 
@@ -10,11 +10,13 @@ export default function TransactionForm({
   amount: _amount,
   categoryId: _categoryId,
   date: _date,
+  isEdit = false,
   note: _note,
   onClose,
   parentCatId: _parentCatId,
   tags: _tags,
   toAccountId: _toAccountId,
+  transactionId,
   type: _type,
 }: ITransactionFormProps) {
   const [type, setType] = useState<TRANSACTION_TYPES>(_type ?? TRANSACTION_TYPES.EXPENSE);
@@ -39,6 +41,8 @@ export default function TransactionForm({
 
   const { error, isPending, mutate } = useAddTransaction(onClose);
 
+  const { isPending: isPendingEdit, mutate: mutateEdit } = useUpdateTransactionMutation(onClose);
+
   const handleOnSetType = (t: TRANSACTION_TYPES) => {
     setType(t);
     // reset all fields when changing transaction type
@@ -53,16 +57,14 @@ export default function TransactionForm({
   };
 
   const handleOnSubmit = () => {
-    mutate({
-      accountId,
-      amount,
-      date,
-      note,
-      tags,
-      toAccountId,
-      type,
-      categoryId: finalCategoryId,
-    });
+    const basePayload = {
+      accountId, amount, date, note, tags, type, categoryId: finalCategoryId,
+    };
+    if (isEdit) {
+      mutateEdit({ ...basePayload, id: transactionId as string });
+    } else {
+      mutate({ ...basePayload, toAccountId });
+    }
   };
 
   const isSubmitDisabled = () => {
@@ -84,7 +86,7 @@ export default function TransactionForm({
       categoryId={categoryId}
       date={date}
       error={error ? error.message : null}
-      isPending={isPending}
+      isPending={isPending || isPendingEdit}
       isSubmitDisabled={isSubmitDisabled}
       note={note}
       parentCatId={parentCatId}

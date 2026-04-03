@@ -2,7 +2,7 @@ import { formatCurrency, formatDate } from '@/lib/formatters.ts';
 import { ITransactionsPageListItemProps } from '@/models/Transactions.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
-export function ListItem({ currency, transaction }: ITransactionsPageListItemProps) {
+export function ListItem({ currency, onClick, transaction }: ITransactionsPageListItemProps) {
   const getTransactionIcon = () => {
     if (transaction.category?.icon) return transaction.category.icon;
 
@@ -52,6 +52,7 @@ export function ListItem({ currency, transaction }: ITransactionsPageListItemPro
     <div
       key={transaction.id}
       className="flex items-center gap-3 px-4 py-3 group hover:bg-white/3 transition-colors"
+      onClick={() => onClick(transaction)}
     >
       <div
         className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"

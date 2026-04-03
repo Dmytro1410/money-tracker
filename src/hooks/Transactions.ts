@@ -24,7 +24,7 @@ export function useAddTransaction(_onSuccess?: () => void) {
 
       const parsed = parseFloat(amount);
       if (Number.isNaN(parsed) || parsed <= 0) throw new Error('Please enter the correct amount');
-      if (!accountId) throw new Error('Select account');
+      if (!accountId) throw new Error('Select an account');
 
       const tagList = tags.split(',').map((t) => t.trim()).filter(Boolean);
       const base = {
@@ -69,6 +69,54 @@ export function useAddTransaction(_onSuccess?: () => void) {
         });
         if (error) throw error;
       }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['transactions'] });
+      qc.invalidateQueries({ queryKey: ['accounts'] });
+      qc.invalidateQueries({ queryKey: ['analytics'] });
+      qc.invalidateQueries({ queryKey: ['budgets'] });
+      if (_onSuccess) _onSuccess();
+    },
+  });
+}
+
+interface UpdateParams {
+  id: string
+  type: TRANSACTION_TYPES
+  amount: string
+  accountId: string
+  categoryId: string | null
+  date: string
+  note: string
+  tags: string
+}
+
+export default function useUpdateTransactionMutation(_onSuccess?: () => void) {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (p: UpdateParams) => {
+      const parsed = parseFloat(p.amount);
+      if (Number.isNaN(parsed) || parsed <= 0) throw new Error('Enter a valid amount');
+      if (!p.accountId) throw new Error('Select an account');
+      if (p.type === 'transfer') throw new Error('Cannot edit transfer transactions directly');
+
+      const tagList = p.tags.split(',').map((t) => t.trim()).filter(Boolean);
+
+      const { error } = await supabase
+        .from('transactions')
+        .update({
+          account_id: p.accountId,
+          category_id: p.categoryId,
+          amount: parsed,
+          type: p.type,
+          date: p.date,
+          note: p.note || null,
+          tags: tagList,
+        })
+        .eq('id', p.id);
+
+      if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['transactions'] });

@@ -7,7 +7,7 @@ export interface ITransaction {
   account?: Pick<Account, 'id' | 'name' | 'currency' | 'color'>
   account_id: string
   amount: number
-  category?: Pick<Category, 'id' | 'name' | 'icon' | 'color'>
+  category?: Pick<Category, 'id' | 'name' | 'icon' | 'color' | 'parent_id'>
   category_id: string | null
   created_at: string
   date: string
@@ -31,11 +31,13 @@ export interface ITransactionFormProps {
   amount?: string;
   categoryId?: string;
   date?: string;
+  isEdit?: boolean;
   note?: string;
   onClose: () => void
   parentCatId?: string;
   tags?: string;
   toAccountId?: string;
+  transactionId?: string;
   type?: TRANSACTION_TYPES
 }
 
@@ -107,7 +109,7 @@ export interface ITransactionsPageComponentProps {
   isLoading: boolean,
   onFilter: (f: TRANSACTION_TYPES) => void,
   onSearch: (s: string) => void,
-  onShowAdd: () => void,
+  onShowTxModal: (tx?: ITransaction) => void,
   search: string,
   totalExpense: number,
   totalIncome: number,
@@ -118,15 +120,16 @@ export type ITransactionsPageFiltersProps = Pick<
 >
 
 export type ITransactionsPageHeaderProps = Pick<
-  ITransactionsPageComponentProps, 'onShowAdd'
+  ITransactionsPageComponentProps, 'onShowTxModal'
 >
 
 export type ITransactionsPageListItemProps = Pick<ITransactionsPageComponentProps, 'currency'> & {
   transaction: ITransaction,
+  onClick: (tx?: ITransaction) => void,
 }
 
 export type ITransactionsPageListProps = Pick<
-  ITransactionsPageComponentProps, 'currency' | 'filteredTransactions' | 'isLoading' | 'search' | 'onShowAdd'
+  ITransactionsPageComponentProps, 'currency' | 'filteredTransactions' | 'isLoading' | 'search' | 'onShowTxModal'
 >
 
 export type ITransactionsPageSummaryProps = Pick<
