@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { LogoContainer } from '@/components/layout/components/LogoContainer.tsx';
 import { Navigation } from '@/components/layout/components/Navigation.tsx';
 import { UserSettings } from '@/components/layout/components/UserSettings.tsx';
+import { DatePicker } from '@/components/DatePicker';
+import { datePickerPages } from '@/constants.ts';
 
 export default function AppLayout() {
+  const location = useLocation();
+
+  const isDatePickersPage = datePickerPages.includes(location.pathname);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -53,25 +58,28 @@ export default function AppLayout() {
           className="xl:hidden flex items-center justify-between px-4 h-14 bg-night-900 border-b border-white/5 flex-shrink-0"
         >
           <LogoContainer />
-          <button
-            className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-white/60 hover:text-white transition-colors"
-            type="button"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <svg
-              fill="none"
-              height="18"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              width="18"
+          <div className="flex items-center gap-4">
+            {isDatePickersPage && <DatePicker />}
+            <button
+              className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+              type="button"
+              onClick={() => setSidebarOpen(true)}
             >
-              <line x1="3" x2="21" y1="6" y2="6" />
-              <line x1="3" x2="21" y1="12" y2="12" />
-              <line x1="3" x2="21" y1="18" y2="18" />
-            </svg>
-          </button>
+              <svg
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                width="18"
+              >
+                <line x1="3" x2="21" y1="6" y2="6" />
+                <line x1="3" x2="21" y1="12" y2="12" />
+                <line x1="3" x2="21" y1="18" y2="18" />
+              </svg>
+            </button>
+          </div>
         </header>
 
         <main className="flex-1 overflow-y-auto bg-night-900">

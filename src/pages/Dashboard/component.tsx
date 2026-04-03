@@ -10,14 +10,10 @@ export interface IDashboardComponentProps {
   budgets: { all: Budget[], childBudgets: Budget[], parentBudgets: Budget[] };
   currency: string;
   firstName: string;
-  month: number;
   monthExpense: number;
   monthIncome: number;
-  onNextMonth: () => void
-  onPrevMonth: () => void
   totalBalance: number;
   transactions: Transaction[];
-  year: number;
 }
 
 export function DashboardComponent({
@@ -25,24 +21,14 @@ export function DashboardComponent({
   budgets,
   currency,
   firstName,
-  month,
   monthExpense,
   monthIncome,
-  onNextMonth,
-  onPrevMonth,
   totalBalance,
   transactions,
-  year,
 }: IDashboardComponentProps) {
   return (
     <div className="container-main">
-      <Header
-        firstName={firstName}
-        month={month}
-        year={year}
-        onNextMonth={onNextMonth}
-        onPrevMonth={onPrevMonth}
-      />
+      <Header firstName={firstName} />
       <MainBalance
         accounts={accounts}
         currency={currency}

@@ -15,7 +15,6 @@ export default function Transactions() {
   const [search, setSearch] = useState('');
 
   const { data: transactions = [], isLoading } = useTransactions(year, month);
-  // const deleteTx = useDeleteTransaction();
 
   const filtered = useMemo(() => transactions.filter((tx) => {
     if (filter !== 'all' && tx.type !== filter) return false;
@@ -23,12 +22,8 @@ export default function Transactions() {
       && !tx.category?.name.toLowerCase().includes(search.toLowerCase()));
   }), [transactions, filter, search]);
 
-  const totalIncome = useMemo(() => filtered.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0), [filtered]);
-  const totalExpense = useMemo(() => filtered.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0), [filtered]);
-
-  // const handleOnDeleteTransaction = (id: string) => {
-  //   deleteTx.mutate(id);
-  // };
+  const totalIncome = useMemo(() => transactions.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0), [transactions]);
+  const totalExpense = useMemo(() => transactions.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0), [transactions]);
 
   const handleOnShowAdd = () => {
     setShowAdd(true);
@@ -60,7 +55,7 @@ export default function Transactions() {
         onSearch={handleOnSearch}
         onShowAdd={handleOnShowAdd}
       />
-      <Modal open={showAdd} title="Новая транзакция" width="4xl" onClose={handleOnHideAdd}>
+      <Modal open={showAdd} title="New Transaction" width="4xl" onClose={handleOnHideAdd}>
         <AddTransactionForm onClose={handleOnHideAdd} />
       </Modal>
     </>
