@@ -1,4 +1,4 @@
-import { Budget, Category } from '@/models/common.ts';
+import { Budget, Category } from '@/types/common.ts';
 import { getParentStats } from '@/pages/Budgets/utils.ts';
 import { ListItem } from '@/pages/Budgets/components/BudgetList/ListItem.tsx';
 import { ChildBudget } from '@/pages/Budgets/components/BudgetList/ChildBudget.tsx';

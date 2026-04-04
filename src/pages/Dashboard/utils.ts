@@ -1,5 +1,5 @@
-import { Account, Budget } from '@/models/common.ts';
-import { ITransaction } from '@/models/Transactions.ts';
+import { Account, Budget } from '@/types/common.ts';
+import { ITransaction } from '@/types/Transactions.ts';
 
 export const getTotalBalance = (accounts: Account[]) => accounts.reduce((s, a) => s + a.balance, 0);
 

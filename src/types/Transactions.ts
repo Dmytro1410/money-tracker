@@ -1,4 +1,4 @@
-import { Account, Category, RecurRule } from '@/models/common.ts';
+import { Account, Category, RecurRule } from '@/types/common.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 // Transaction interfaces

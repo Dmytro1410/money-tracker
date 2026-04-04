@@ -1,5 +1,5 @@
 import { formatCurrency, formatDate } from '@/lib/formatters.ts';
-import { ITransaction } from '@/models/Transactions.ts';
+import { ITransaction } from '@/types/Transactions.ts';
 
 export function RecentTransactions({
   currency,

@@ -1,4 +1,4 @@
-import { Budget } from '@/models/common.ts';
+import { Budget } from '@/types/common.ts';
 import { StatsRow } from '@/pages/Budgets/components/StatsRow.tsx';
 import { OverSpendWarning } from '@/pages/Budgets/components/OverSpendWarning.tsx';
 

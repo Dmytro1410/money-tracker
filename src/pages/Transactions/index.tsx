@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useAuthStore } from '@/stores';
 import Modal from '@/components/ui/Modal';
-import TransactionForm from '@/components/modals/Transactions';
+import TransactionForm from '@/modals/Transactions';
 import { TransactionsComponent } from '@/pages/Transactions/component.tsx';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
-import { ITransaction } from '@/models/Transactions.ts';
+import { ITransaction } from '@/types/Transactions.ts';
 import { useTransactions } from '@/hooks/Transactions.ts';
 
 export default function Transactions() {

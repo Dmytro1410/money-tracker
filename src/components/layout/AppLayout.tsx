@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { LogoContainer } from '@/components/layout/components/LogoContainer.tsx';
 import { Navigation } from '@/components/layout/components/Navigation.tsx';
 import { UserSettings } from '@/components/layout/components/UserSettings.tsx';
-import { DatePicker } from '@/components/DatePicker';
+import { MonthSelector } from '@/components/MonthSelector';
 import { datePickerPages } from '@/constants.ts';
 
 export default function AppLayout() {
@@ -59,7 +59,7 @@ export default function AppLayout() {
         >
           <LogoContainer />
           <div className="flex items-center gap-4">
-            {isDatePickersPage && <DatePicker />}
+            {isDatePickersPage && <MonthSelector />}
             <button
               className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-white/60 hover:text-white transition-colors"
               type="button"

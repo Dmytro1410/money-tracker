@@ -1,12 +1,12 @@
-import { TypeSelector } from '@/components/modals/Transactions/components/TypeSelector.tsx';
+import { TypeSelector } from '@/modals/Transactions/components/TypeSelector.tsx';
 import { TABS } from '@/constants/Transactions.ts';
-import { Amount } from '@/components/modals/Transactions/components/Amount.tsx';
-import { Accounts } from '@/components/modals/Transactions/components/Accounts.tsx';
-import { Categories } from '@/components/modals/Transactions/components/Categories.tsx';
-import { DateSelector } from '@/components/modals/Transactions/components/DateSelector.tsx';
-import { NoteEditor } from '@/components/modals/Transactions/components/NoteEditor.tsx';
-import { TagsEditor } from '@/components/modals/Transactions/components/TagsEditor.tsx';
-import { ITransactionFormComponentProps } from '@/models/Transactions.ts';
+import { Amount } from '@/modals/Transactions/components/Amount.tsx';
+import { Accounts } from '@/modals/Transactions/components/Accounts.tsx';
+import { Categories } from '@/modals/Transactions/components/Categories.tsx';
+import { NoteEditor } from '@/modals/Transactions/components/NoteEditor.tsx';
+import { TagsEditor } from '@/modals/Transactions/components/TagsEditor.tsx';
+import { ITransactionFormComponentProps } from '@/types/Transactions.ts';
+import { DatePicker } from '@/components/DatePicker';
 
 export function TransactionsModalComponent({
   accountId,
@@ -77,7 +77,7 @@ export function TransactionsModalComponent({
       )}
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-        <DateSelector date={date} onSetDate={onSetDate} />
+        <DatePicker date={date} onSetDate={onSetDate} />
         <NoteEditor note={note} onSetNote={onSetNote} />
       </div>
 

@@ -1,4 +1,4 @@
-import { format, formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow, parseISO } from 'date-fns';
 import { enCA } from 'date-fns/locale';
 
 // ─── Деньги ─────────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ export function formatAmount(amount: number, locale = 'en-CA'): string {
 
 // ─── Даты ───────────────────────────────────────────────────────────
 export function formatDate(date: string | Date, pattern = 'd MMM yyyy'): string {
-  return format(typeof date === 'string' ? new Date(date) : date, pattern, {
+  return format(typeof date === 'string' ? new Date(parseISO(date)) : date, pattern, {
     locale: enCA,
   });
 }

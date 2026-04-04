@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores';
-import type { Profile } from '@/models/common.ts';
+import type { Profile } from '@/types/common.ts';
 
 import AppLayout from '@/components/layout/AppLayout';
 import Dashboard from '@/pages/Dashboard';

@@ -3,7 +3,7 @@ import {
 } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
-import { ITransaction } from '@/models/Transactions.ts';
+import { ITransaction } from '@/types/Transactions.ts';
 import { useUIStore } from '@/stores';
 
 interface ITransactionBasePayload {

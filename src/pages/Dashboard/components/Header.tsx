@@ -1,4 +1,4 @@
-import { DatePicker } from '@/components/DatePicker';
+import { MonthSelector } from '@/components/MonthSelector';
 
 export interface IDashboardHeaderProps {
   firstName: string,
@@ -11,7 +11,7 @@ export function Header({ firstName }: IDashboardHeaderProps) {
       <h1 className="header-main">
         {firstName}
       </h1>
-      <div className="hidden xl:block"><DatePicker /></div>
+      <div className="hidden xl:block"><MonthSelector /></div>
     </div>
   );
 }

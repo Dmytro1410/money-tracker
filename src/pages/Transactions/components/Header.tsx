@@ -1,12 +1,12 @@
-import { DatePicker } from '@/components/DatePicker';
-import { ITransactionsPageHeaderProps } from '@/models/Transactions.ts';
+import { MonthSelector } from '@/components/MonthSelector';
+import { ITransactionsPageHeaderProps } from '@/types/Transactions.ts';
 
 export function Header({ onShowTxModal }: ITransactionsPageHeaderProps) {
   return (
     <div className="flex items-center justify-between h-10">
       <h1 className="header-main">Transactions</h1>
       <div className="flex items-center gap-8">
-        <div className="hidden xl:block"><DatePicker /></div>
+        <div className="hidden xl:block"><MonthSelector /></div>
         <button
           className="btn-primary"
           type="button"

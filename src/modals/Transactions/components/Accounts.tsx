@@ -1,5 +1,5 @@
 import Select from '@/components/ui/Select.tsx';
-import { ITransactionFormAccountsProps } from '@/models/Transactions.ts';
+import { ITransactionFormAccountsProps } from '@/types/Transactions.ts';
 
 export function Accounts({
   accountId, accounts, onSetAccountId, onSetToAccountId, toAccountId, type,
