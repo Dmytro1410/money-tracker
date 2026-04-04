@@ -1,33 +1,37 @@
 import { useState } from 'react';
 import { useAccounts, useCategories } from '@/hooks';
 import { TransactionsModalComponent } from '@/components/modals/Transactions/component.tsx';
-import useUpdateTransactionMutation, { useAddTransaction } from '@/hooks/Transactions.ts';
+import useUpdateTransactionMutation, { useAddTransaction, useDeleteTransaction } from '@/hooks/Transactions.ts';
 import { TABS, TRANSACTION_TYPES } from '@/constants/Transactions.ts';
-import { ITransactionFormProps } from '@/models/Transactions.ts';
+import { ITransaction, ITransactionFormProps } from '@/models/Transactions.ts';
 
 export default function TransactionForm({
-  accountId: _accountId,
-  amount: _amount,
-  categoryId: _categoryId,
-  date: _date,
-  isEdit = false,
-  note: _note,
   onClose,
-  parentCatId: _parentCatId,
-  tags: _tags,
-  toAccountId: _toAccountId,
-  transactionId,
-  type: _type,
+  transaction,
 }: ITransactionFormProps) {
-  const [type, setType] = useState<TRANSACTION_TYPES>(_type ?? TRANSACTION_TYPES.EXPENSE);
-  const [amount, setAmount] = useState(_amount ?? '');
-  const [accountId, setAccountId] = useState(_accountId ?? '');
-  const [toAccountId, setToAccountId] = useState(_toAccountId ?? '');
-  const [parentCatId, setParentCatId] = useState(_parentCatId ?? '');
-  const [categoryId, setCategoryId] = useState(_categoryId ?? '');
-  const [date, setDate] = useState(_date ?? new Date().toISOString().slice(0, 10));
-  const [note, setNote] = useState(_note ?? '');
-  const [tags, setTags] = useState(_tags ?? '');
+  const {
+    account_id: txAccountId,
+    category_id: txCategoryId,
+    date: txDate,
+    id: txId,
+    note: txNote,
+    transfer_to_account_id: txToAccountId,
+    type: txType,
+  } = (transaction || {} as ITransaction);
+
+  const txAmount: string | undefined = transaction?.amount?.toString();
+  const txParentCatId: string | undefined | null = transaction?.category?.parent_id;
+  const txTags: string | undefined = transaction?.tags?.join(',');
+
+  const [type, setType] = useState<TRANSACTION_TYPES>(txType ?? TRANSACTION_TYPES.EXPENSE);
+  const [amount, setAmount] = useState(txAmount ?? '');
+  const [accountId, setAccountId] = useState(txAccountId ?? '');
+  const [toAccountId, setToAccountId] = useState(txToAccountId ?? '');
+  const [parentCatId, setParentCatId] = useState(txParentCatId ?? '');
+  const [categoryId, setCategoryId] = useState(txCategoryId ?? '');
+  const [date, setDate] = useState(txDate ?? new Date().toISOString().slice(0, 10));
+  const [note, setNote] = useState(txNote ?? '');
+  const [tags, setTags] = useState(txTags ?? '');
 
   const { data: accounts = [] } = useAccounts();
   const { data: catData } = useCategories(type);
@@ -39,9 +43,19 @@ export default function TransactionForm({
   const activeClass = TABS.find((t) => t.value === type)?.activeClass ?? '';
   const finalCategoryId = categoryId || parentCatId || null;
 
-  const { error, isPending, mutate } = useAddTransaction(onClose);
+  const {
+    error: submitError, isPending: isPendingSubmit, mutate: submitTx,
+  } = useAddTransaction(onClose);
+  const {
+    error: editError, isPending: isPendingEdit, mutate: editTx,
+  } = useUpdateTransactionMutation(onClose);
+  const {
+    error: deleteError, isPending: isPendingDelete, mutate: deleteTx,
+  } = useDeleteTransaction(onClose);
 
-  const { isPending: isPendingEdit, mutate: mutateEdit } = useUpdateTransactionMutation(onClose);
+  const isPending = isPendingSubmit || isPendingEdit || isPendingDelete;
+
+  const error = submitError || editError || deleteError;
 
   const handleOnSetType = (t: TRANSACTION_TYPES) => {
     setType(t);
@@ -60,10 +74,16 @@ export default function TransactionForm({
     const basePayload = {
       accountId, amount, date, note, tags, type, categoryId: finalCategoryId,
     };
-    if (isEdit) {
-      mutateEdit({ ...basePayload, id: transactionId as string });
+    if (txId) {
+      editTx({ ...basePayload, id: txId as string });
     } else {
-      mutate({ ...basePayload, toAccountId });
+      submitTx({ ...basePayload, toAccountId });
+    }
+  };
+
+  const handleOnDelete = () => {
+    if (txId) {
+      deleteTx(txId);
     }
   };
 
@@ -86,7 +106,8 @@ export default function TransactionForm({
       categoryId={categoryId}
       date={date}
       error={error ? error.message : null}
-      isPending={isPending || isPendingEdit}
+      isEdit={txId !== undefined}
+      isPending={isPending}
       isSubmitDisabled={isSubmitDisabled}
       note={note}
       parentCatId={parentCatId}
@@ -96,6 +117,7 @@ export default function TransactionForm({
       toAccountId={toAccountId}
       type={type}
       onClose={onClose}
+      onDelete={handleOnDelete}
       onSetAccountId={setAccountId}
       onSetAmount={setAmount}
       onSetCategoryId={setCategoryId}
