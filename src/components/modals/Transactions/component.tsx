@@ -16,10 +16,12 @@ export function TransactionsModalComponent({
   categoryId,
   date,
   error,
+  isEdit,
   isPending,
   isSubmitDisabled,
   note,
   onClose,
+  onDelete,
   onSetAccountId,
   onSetAmount,
   onSetCategoryId,
@@ -37,6 +39,11 @@ export function TransactionsModalComponent({
   toAccountId,
   type,
 }: ITransactionFormComponentProps) {
+  const getSubmitBtnText = () => {
+    if (isPending) return 'Submitting...';
+    const txType = TABS.find((t) => t.value === type)?.label.toLowerCase();
+    return `${isEdit ? 'Edit' : 'Add'} ${txType}`;
+  };
   return (
     <div className="space-y-4">
       <TypeSelector type={type} onSetType={onSetType} />
@@ -88,9 +95,21 @@ export function TransactionsModalComponent({
           type="button"
           onClick={onSubmit}
         >
-          {isPending ? 'Submitting…' : `Add ${TABS.find((t) => t.value === type)?.label.toLowerCase()}`}
+          {getSubmitBtnText()}
         </button>
       </div>
+      {isEdit && (
+        <div className="flex gap-3 pt-1">
+          <button
+            className="btn-primary flex-1 bg-red-400/10 hover:bg-red-400/20 text-red-400"
+            disabled={isPending}
+            type="button"
+            onClick={onDelete}
+          >
+            Delete
+          </button>
+        </div>
+      )}
     </div>
   );
 }

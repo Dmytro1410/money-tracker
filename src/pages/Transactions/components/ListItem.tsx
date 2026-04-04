@@ -51,7 +51,7 @@ export function ListItem({ currency, onClick, transaction }: ITransactionsPageLi
   return (
     <div
       key={transaction.id}
-      className="flex items-center gap-3 px-4 py-3 group hover:bg-white/3 transition-colors"
+      className="flex items-center gap-3 px-4 py-3 group hover:bg-white/3 transition-colors hover:cursor-pointer hover:bg-white/5"
       onClick={() => onClick(transaction)}
     >
       <div

@@ -27,18 +27,8 @@ export interface ITransaction {
 // Modal interfaces
 
 export interface ITransactionFormProps {
-  accountId?: string;
-  amount?: string;
-  categoryId?: string;
-  date?: string;
-  isEdit?: boolean;
-  note?: string;
+  transaction?: ITransaction | null;
   onClose: () => void
-  parentCatId?: string;
-  tags?: string;
-  toAccountId?: string;
-  transactionId?: string;
-  type?: TRANSACTION_TYPES
 }
 
 export interface ITransactionFormComponentProps {
@@ -49,10 +39,12 @@ export interface ITransactionFormComponentProps {
   categoryId: string;
   date: string;
   error: string | null;
+  isEdit: boolean;
   isPending: boolean;
   isSubmitDisabled: () => boolean;
   note: string;
   onClose: () => void;
+  onDelete: () => void;
   onSetAccountId: (id: string) => void;
   onSetAmount: (amount: string) => void;
   onSetCategoryId: (id: string) => void;
