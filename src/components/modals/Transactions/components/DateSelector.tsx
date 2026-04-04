@@ -7,7 +7,7 @@ export function DateSelector({
     <div className="w-full overflow-hidden">
       <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">Date</label>
       <input
-        className="input w-[calc(100%_-_24px)] xl:w-full"
+        className="input w-[calc(100%_-_38px)] xl:w-full"
         type="date"
         value={date}
         onChange={(e) => onSetDate(e.target.value)}
