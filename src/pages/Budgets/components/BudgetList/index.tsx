@@ -1,9 +1,9 @@
-import { Budget, BudgetPeriod } from '@/models/common.ts';
+import { Budget, BudgetPeriod } from '@/types/common.ts';
 import { useCategories } from '@/hooks';
 import { ParentBudget } from '@/pages/Budgets/components/BudgetList/ParentBudget.tsx';
 import { useState } from 'react';
 import Modal from '@/components/ui/Modal.tsx';
-import { EditBudgetForm } from '@/components/modals/EditBudgetForm.tsx';
+import { EditBudgetForm } from '@/modals/EditBudgetForm.tsx';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 export interface IBudgetsListProps {

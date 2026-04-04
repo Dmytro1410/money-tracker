@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useAccounts, useCategories } from '@/hooks';
-import { TransactionsModalComponent } from '@/components/modals/Transactions/component.tsx';
+import { TransactionsModalComponent } from '@/modals/Transactions/component.tsx';
 import useUpdateTransactionMutation, { useAddTransaction, useDeleteTransaction } from '@/hooks/Transactions.ts';
 import { TABS, TRANSACTION_TYPES } from '@/constants/Transactions.ts';
-import { ITransaction, ITransactionFormProps } from '@/models/Transactions.ts';
+import { ITransaction, ITransactionFormProps } from '@/types/Transactions.ts';
 
 export default function TransactionForm({
   onClose,

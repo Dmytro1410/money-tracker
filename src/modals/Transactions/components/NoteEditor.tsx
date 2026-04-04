@@ -1,4 +1,4 @@
-import { ITransactionFormNoteEditorProps } from '@/models/Transactions.ts';
+import { ITransactionFormNoteEditorProps } from '@/types/Transactions.ts';
 
 export function NoteEditor({ note, onSetNote }: ITransactionFormNoteEditorProps) {
   return (

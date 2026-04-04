@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useAuthStore } from '@/stores';
 import { useAddAccount } from '@/hooks';
-import type { AccountType } from '@/models/common.ts';
-import { AccountsFormsComponent } from '@/components/modals/Accounts/component.tsx';
+import type { AccountType } from '@/types/common.ts';
+import { AccountsFormsComponent } from '@/modals/Accounts/component.tsx';
 
 const TYPES: { value: AccountType; label: string; icon: string }[] = [
   { value: 'bank', label: 'Банковский счёт', icon: '🏦' },

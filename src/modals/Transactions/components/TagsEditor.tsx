@@ -1,4 +1,4 @@
-import { ITransactionFormTagsEditorProps } from '@/models/Transactions.ts';
+import { ITransactionFormTagsEditorProps } from '@/types/Transactions.ts';
 
 export function TagsEditor({ onSetTags, tags }: ITransactionFormTagsEditorProps) {
   return (

@@ -1,4 +1,4 @@
-import { ITransactionFormCategoriesProps } from '@/models/Transactions.ts';
+import { ITransactionFormCategoriesProps } from '@/types/Transactions.ts';
 
 export function Categories({
   activeClass,

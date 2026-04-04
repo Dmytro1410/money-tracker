@@ -1,5 +1,6 @@
 // ─── Пользователь / семья ────────────────────────────────────────────
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
+import { RefObject } from 'react';
 
 export interface Profile {
   id: string
@@ -134,4 +135,22 @@ export interface ModalProps {
 export interface PaginationParams {
   page: number
   per_page: number
+}
+
+// Date picker
+export interface IDatePickerProps {
+  date: string; // YYYY-MM-DD
+  onSetDate: (date: string) => void;
+}
+
+export interface IDatePickerComponentProps {
+  calendarDays: Date[];
+  containerRef: RefObject<HTMLDivElement | null>;
+  handleSelect: (day: Date) => void;
+  isOpen: boolean;
+  monthStart: Date;
+  selectedDate: Date;
+  setIsOpen: (isOpen: boolean) => void;
+  setViewDate: (viewDate: Date) => void;
+  viewDate: Date;
 }

@@ -1,4 +1,4 @@
-import { ITransactionsPageFiltersProps } from '@/models/Transactions.ts';
+import { ITransactionsPageFiltersProps } from '@/types/Transactions.ts';
 import { FILTERS } from '@/constants/Transactions.ts';
 
 export function Filters({

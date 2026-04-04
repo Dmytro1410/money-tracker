@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores';
-import { ITransactionFormAmountProps } from '@/models/Transactions.ts';
+import { ITransactionFormAmountProps } from '@/types/Transactions.ts';
 
 export function Amount({
   accountId, accounts, amount, onSetAmount,

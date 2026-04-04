@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import type { AuthMode } from '@/models/common.ts';
+import type { AuthMode } from '@/types/common.ts';
 
 export default function Login() {
   const [email, setEmail] = useState('');

@@ -1,5 +1,5 @@
 import { formatCurrency, formatDate } from '@/lib/formatters.ts';
-import { ITransactionsPageListItemProps } from '@/models/Transactions.ts';
+import { ITransactionsPageListItemProps } from '@/types/Transactions.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 export function ListItem({ currency, onClick, transaction }: ITransactionsPageListItemProps) {

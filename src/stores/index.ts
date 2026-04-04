@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Profile } from '@/models/common.ts';
+import type { Profile } from '@/types/common.ts';
 
 // ─── Auth store ──────────────────────────────────────────────────────
 interface AuthState {

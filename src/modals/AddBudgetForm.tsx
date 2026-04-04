@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase.ts';
 import { useAuthStore, useUIStore } from '@/stores';
 import { useCategories } from '@/hooks';
-import type { BudgetPeriod } from '@/models/common.ts';
+import type { BudgetPeriod } from '@/types/common.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 const PERIODS: { value: BudgetPeriod; label: string }[] = [

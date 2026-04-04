@@ -2,8 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import type {
   Account, AccountType, Budget, BudgetPeriod, Category, PeriodSummary, RecurRule,
-} from '@/models/common.ts';
-import { ITransaction } from '@/models/Transactions.ts';
+} from '@/types/common.ts';
+import { ITransaction } from '@/types/Transactions.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 // ─── Payload types ────────────────────────────────────────────

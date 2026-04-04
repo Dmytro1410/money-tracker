@@ -1,10 +1,10 @@
 import { Header } from '@/pages/Dashboard/components/Header.tsx';
 import { MainBalance } from '@/pages/Dashboard/components/MainBalance.tsx';
-import { Account, Budget } from '@/models/common.ts';
+import { Account, Budget } from '@/types/common.ts';
 import { Accounts } from '@/pages/Dashboard/components/Accounts.tsx';
 import { Budgets } from '@/pages/Dashboard/components/Budgets.tsx';
 import { RecentTransactions } from '@/pages/Dashboard/components/RecentTransactions.tsx';
-import { ITransaction } from '@/models/Transactions.ts';
+import { ITransaction } from '@/types/Transactions.ts';
 
 export interface IDashboardComponentProps {
   accounts: Account[]

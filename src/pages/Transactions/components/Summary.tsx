@@ -1,5 +1,5 @@
 import { formatCurrency } from '@/lib/formatters.ts';
-import { ITransactionsPageSummaryProps } from '@/models/Transactions.ts';
+import { ITransactionsPageSummaryProps } from '@/types/Transactions.ts';
 
 export function Summary({ currency, totalExpense, totalIncome }: ITransactionsPageSummaryProps) {
   return (

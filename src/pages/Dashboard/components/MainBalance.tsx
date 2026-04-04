@@ -1,6 +1,6 @@
 import { formatCurrency } from '@/lib/formatters.ts';
-import { Account } from '@/models/common.ts';
-import { ITransaction } from '@/models/Transactions.ts';
+import { Account } from '@/types/common.ts';
+import { ITransaction } from '@/types/Transactions.ts';
 
 export function MainBalance({
   accounts, currency, monthExpense, monthIncome, totalBalance, transactions,

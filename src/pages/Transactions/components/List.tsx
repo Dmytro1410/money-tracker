@@ -1,6 +1,6 @@
 import { ListItem } from '@/pages/Transactions/components/ListItem.tsx';
 import { Spinner } from '@/components/Spinner.tsx';
-import { ITransactionsPageListProps } from '@/models/Transactions.ts';
+import { ITransactionsPageListProps } from '@/types/Transactions.ts';
 
 export function List({
   currency,

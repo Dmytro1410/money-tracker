@@ -1,5 +1,5 @@
 import { TABS } from '@/constants/Transactions.ts';
-import { ITransactionFormTypeSelectorProps } from '@/models/Transactions.ts';
+import { ITransactionFormTypeSelectorProps } from '@/types/Transactions.ts';
 
 export function TypeSelector({ onSetType, type }: ITransactionFormTypeSelectorProps) {
   return (

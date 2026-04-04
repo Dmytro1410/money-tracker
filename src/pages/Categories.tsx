@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores';
-import type { Category } from '@/models/common.ts';
+import type { Category } from '@/types/common.ts';
 import Modal from '@/components/ui/Modal';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
