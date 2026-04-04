@@ -47,7 +47,7 @@ export function DatePickerComponent({
 
       {isOpen && (
         <div
-          className="absolute right-0 z-50 mt-2 w-72 bg-night-700 border border-white/10 rounded-xl shadow-2xl p-4 ring-1 ring-black animate-in fade-in zoom-in duration-150"
+          className="absolute bottom-10 right-0 z-50 mt-2 w-72 bg-night-700 border border-white/10 rounded-xl shadow-2xl p-4 ring-1 ring-black animate-in fade-in zoom-in duration-150"
         >
           <div className="flex items-center justify-between mb-4 px-1">
             <button className="btn-icon" type="button" onClick={() => setViewDate(subMonths(viewDate, 1))}>
