@@ -111,24 +111,6 @@ export function useCategories(type: TRANSACTION_TYPES) {
 }
 
 // ─── Budgets ─────────────────────────────────────────────────
-export function useBudgets(year: number, month: number) {
-  return useQuery({
-    queryKey: ['budgets', year, month],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('budgets')
-        .select('*, category:categories!budgets_category_id_fkey(id,name,icon,color)')
-        .eq('year', year).eq('month', month);
-      if (error) throw error;
-      return {
-        all: data as Budget[],
-        childBudgets: (data as Budget[])?.filter((b) => b.parent_category_id),
-        parentBudgets: (data as Budget[])?.filter((b) => !b.parent_category_id),
-      };
-    },
-  });
-}
-
 export function useUpsertBudget() {
   const qc = useQueryClient();
   return useMutation({

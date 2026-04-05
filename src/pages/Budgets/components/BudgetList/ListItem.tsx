@@ -1,26 +1,11 @@
-import { Budget } from '@/types/common.ts';
 import { StatsRow } from '@/pages/Budgets/components/StatsRow.tsx';
 import { OverSpendWarning } from '@/pages/Budgets/components/OverSpendWarning.tsx';
-
-export interface IBudgetListItemProps {
-  budget: Budget;
-  currency: string;
-  isExpanded: boolean;
-  onDeleteBudget?: (id: string) => void;
-  onEdit?: (val: any) => void;
-  onExpand?: (id: string) => void;
-  over: boolean;
-  pct: number
-  remaining: number;
-  totalLimit: number;
-  totalSpent: number;
-}
+import { IBudgetsBudgetListItemProps } from '@/types/Budgets.ts';
 
 export function ListItem({
   budget,
   currency,
   isExpanded,
-  onDeleteBudget,
   onEdit,
   onExpand,
   over,
@@ -28,11 +13,7 @@ export function ListItem({
   remaining,
   totalLimit,
   totalSpent,
-}: IBudgetListItemProps) {
-  const handleOnDelete = () => {
-    if (onDeleteBudget) onDeleteBudget(budget.id);
-  };
-
+}: IBudgetsBudgetListItemProps) {
   const handleOnExpand = () => {
     if (onExpand) onExpand(budget.id);
   };
@@ -106,15 +87,6 @@ export function ListItem({
                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
-            </button>
-          )}
-          {onDeleteBudget && (
-            <button
-              className="w-7 h-7 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 flex items-center justify-center transition-all text-sm"
-              type="button"
-              onClick={handleOnDelete}
-            >
-              ×
             </button>
           )}
         </div>

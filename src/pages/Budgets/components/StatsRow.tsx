@@ -1,10 +1,5 @@
 import { formatCurrency } from '@/lib/formatters.ts';
-
-export interface IBudgetsStatsRowProps {
-  currency: string;
-  limit: number;
-  spent?: number;
-}
+import { IBudgetsStatsRowProps } from '@/types/Budgets.ts';
 
 export function StatsRow({
   currency,
@@ -16,7 +11,7 @@ export function StatsRow({
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-4 text-xs">
         <span className="text-white/30 font-500">
-          Потрачено:
+          Spent:
           {' '}
           <span
             className="text-white/60 font-700"
@@ -26,7 +21,7 @@ export function StatsRow({
         </span>
         <span className="text-white/15">·</span>
         <span className="text-white/30 font-500">
-          Лимит:
+          Limit:
           {' '}
           <span className="text-white/60 font-700">{formatCurrency(limit, currency)}</span>
         </span>

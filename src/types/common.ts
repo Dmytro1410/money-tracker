@@ -154,3 +154,16 @@ export interface IDatePickerComponentProps {
   setViewDate: (viewDate: Date) => void;
   viewDate: Date;
 }
+
+// Page components
+export interface IPageHeaderProps {
+  title: string,
+  onShowModal: () => void
+}
+
+export interface IPageEmptyListProps {
+  onResetSearch?: () => void
+  onShowAdd: () => void
+  search?: string;
+  title: string;
+}
