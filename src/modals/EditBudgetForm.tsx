@@ -31,9 +31,7 @@ export function EditBudgetForm({
   const [error, setError] = useState<string | null>(null);
 
   const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
-  const allCats = catData?.all ?? [];
-  const parents = catData?.parents ?? [];
-  const children = catData?.children ?? [];
+  const { all: allCats = [], children = [], parents = [] } = catData || {};
 
   const selectedCat = allCats.find((c) => c.id === categoryId);
   const isSubCat = !!selectedCat?.parent_id;

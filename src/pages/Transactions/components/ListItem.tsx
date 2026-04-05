@@ -1,8 +1,11 @@
 import { formatCurrency, formatDate } from '@/lib/formatters.ts';
 import { ITransactionsPageListItemProps } from '@/types/Transactions.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
+import { useCategories } from '@/hooks';
 
 export function ListItem({ currency, onClick, transaction }: ITransactionsPageListItemProps) {
+  const { data } = useCategories(transaction.type);
+  const { parents } = data || {};
   const getTransactionIcon = () => {
     if (transaction.category?.icon) return transaction.category.icon;
 
@@ -46,7 +49,8 @@ export function ListItem({ currency, onClick, transaction }: ITransactionsPageLi
   const getTransactionMessage = () => {
     if (transaction.type === TRANSACTION_TYPES.TRANSFER) return `${transaction.account?.name} ↔ ${transaction.to_account?.name}`;
 
-    return `${transaction.category?.name}${transaction.note ? `-${transaction.note}` : ''}`;
+    const parentCatName = parents?.find((c) => c.id === transaction.category?.parent_id)?.name;
+    return `${parentCatName} (${transaction.category?.name})${transaction.note ? `-${transaction.note}` : ''}`;
   };
   return (
     <div
