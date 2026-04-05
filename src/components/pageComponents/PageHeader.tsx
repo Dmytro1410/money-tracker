@@ -1,18 +1,16 @@
 import { MonthSelector } from '@/components/MonthSelector';
-import { ITransactionsPageHeaderProps } from '@/types/Transactions.ts';
+import { IPageHeaderProps } from '@/types/common.ts';
 
-export function Header({ onShowTxModal }: ITransactionsPageHeaderProps) {
+export function PageHeader({ onShowModal, title }: IPageHeaderProps) {
   return (
     <div className="flex items-center justify-between h-10">
-      <h1 className="header-main">Transactions</h1>
+      <h1 className="header-main">{title}</h1>
       <div className="flex items-center gap-8">
         <div className="hidden xl:block"><MonthSelector /></div>
         <button
           className="btn-primary"
           type="button"
-          onClick={() => {
-            onShowTxModal();
-          }}
+          onClick={onShowModal}
         >
           <svg
             fill="none"

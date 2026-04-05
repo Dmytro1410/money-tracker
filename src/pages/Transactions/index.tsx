@@ -43,6 +43,10 @@ export default function Transactions() {
     setFilter(f);
   };
 
+  const handleOnResetSearch = () => {
+    setSearch('');
+  };
+
   return (
     <>
       <TransactionsComponent
@@ -54,6 +58,7 @@ export default function Transactions() {
         totalExpense={totalExpense}
         totalIncome={totalIncome}
         onFilter={handleOnFilter}
+        onResetSearch={handleOnResetSearch}
         onSearch={handleOnSearch}
         onShowTxModal={handleOnShowTxModal}
       />

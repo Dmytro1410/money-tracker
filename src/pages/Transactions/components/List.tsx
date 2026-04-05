@@ -1,11 +1,13 @@
 import { ListItem } from '@/pages/Transactions/components/ListItem.tsx';
 import { Spinner } from '@/components/Spinner.tsx';
 import { ITransactionsPageListProps } from '@/types/Transactions.ts';
+import { PageEmptyList } from '@/components/pageComponents/PageEmptyList.tsx';
 
 export function List({
   currency,
   filteredTransactions,
   isLoading,
+  onResetSearch,
   onShowTxModal,
   search,
 }: ITransactionsPageListProps) {
@@ -24,20 +26,7 @@ export function List({
         />
       ))}
       {filteredTransactions.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-white/30 text-sm">{search ? 'Nothing found' : 'No transactions for this period'}</p>
-          {!search && (
-            <button
-              className="mt-3 text-violet-400 text-sm hover:text-violet-300 transition-colors"
-              type="button"
-              onClick={() => {
-                onShowTxModal();
-              }}
-            >
-              Add new →
-            </button>
-          )}
-        </div>
+        <PageEmptyList search={search} title="Transactions" onResetSearch={onResetSearch} onShowAdd={onShowTxModal} />
       )}
     </div>
   );

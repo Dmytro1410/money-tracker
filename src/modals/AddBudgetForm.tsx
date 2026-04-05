@@ -65,7 +65,12 @@ export default function AddBudgetForm({ onClose }: Props) {
       const { error } = await supabase
         .from('budgets')
         .upsert(
-          { ...base, category_id: categoryId, amount: parsed },
+          {
+            ...base,
+            category_id: categoryId,
+            amount: parsed,
+            parent_category_id: parentCat?.id ?? null,
+          },
           { onConflict: 'user_id,category_id,year,month' },
         );
       if (error) throw error;

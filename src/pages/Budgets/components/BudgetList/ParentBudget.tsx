@@ -1,26 +1,16 @@
-import { Budget, Category } from '@/types/common.ts';
 import { getParentStats } from '@/pages/Budgets/utils.ts';
 import { ListItem } from '@/pages/Budgets/components/BudgetList/ListItem.tsx';
 import { ChildBudget } from '@/pages/Budgets/components/BudgetList/ChildBudget.tsx';
+import { IBudgetsParentBudgetProps } from '@/types/Budgets.ts';
 
 export function ParentBudget({
   budget,
   categories,
   childBudgets, currency,
   isExpanded,
-  onDelete,
   onEdit,
   onExpand,
-}: {
-  budget: Budget;
-  categories: Category[],
-  childBudgets: Budget[],
-  currency: string,
-  isExpanded: boolean,
-  onEdit: (payload: Pick<Budget, 'id' | 'amount' | 'period'> & { categoryId: Budget['category_id'] }) => void
-  onExpand: (id: string) => void;
-  onDelete: (id: string) => void;
-}) {
+}: IBudgetsParentBudgetProps) {
   const { subs, totalAmount: parentAmount, totalSpent: parentSpent } = getParentStats(
     { budget, categories, childBudgets },
   );
@@ -41,19 +31,17 @@ export function ParentBudget({
         remaining={remaining}
         totalLimit={parentAmount}
         totalSpent={parentSpent}
-        onDeleteBudget={hasSubs ? undefined : onDelete}
         onEdit={hasSubs ? undefined : onEdit}
         onExpand={hasSubs ? onExpand : undefined}
       />
 
       {isExpanded && subs.length > 0 && (
-        <div className="border-t p-4 border-white/5  bg-night-700">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-2 border-t p-4 border-white/5 bg-night-700">
           {subs.map((sub) => (
             <ChildBudget
               key={sub.id}
               currency={currency}
               sub={sub}
-              onDelete={onDelete}
               onEdit={onEdit}
             />
           ))}

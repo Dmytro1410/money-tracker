@@ -1,8 +1,8 @@
-import { Header } from '@/pages/Transactions/components/Header.tsx';
 import { Summary } from '@/pages/Transactions/components/Summary.tsx';
 import { Filters } from '@/pages/Transactions/components/Filters.tsx';
 import { List } from '@/pages/Transactions/components/List.tsx';
 import { ITransactionsPageComponentProps } from '@/types/Transactions.ts';
+import { PageHeader } from '@/components/pageComponents/PageHeader.tsx';
 
 export function TransactionsComponent({
   currency,
@@ -10,6 +10,7 @@ export function TransactionsComponent({
   filteredTransactions,
   isLoading,
   onFilter,
+  onResetSearch,
   onSearch,
   onShowTxModal,
   search,
@@ -18,7 +19,12 @@ export function TransactionsComponent({
 }: ITransactionsPageComponentProps) {
   return (
     <div className="p-4 lg:p-7 space-y-6 overflow-hidden h-full">
-      <Header onShowTxModal={onShowTxModal} />
+      <PageHeader
+        title="Transactions"
+        onShowModal={() => {
+          onShowTxModal();
+        }}
+      />
       <Summary currency={currency} totalExpense={totalExpense} totalIncome={totalIncome} />
 
       <Filters filter={filter} search={search} onFilter={onFilter} onSearch={onSearch} />
@@ -27,6 +33,7 @@ export function TransactionsComponent({
         filteredTransactions={filteredTransactions}
         isLoading={isLoading}
         search={search}
+        onResetSearch={onResetSearch}
         onShowTxModal={onShowTxModal}
       />
     </div>

@@ -1,26 +1,18 @@
-import { Budget, BudgetPeriod } from '@/types/common.ts';
+import { BudgetPeriod } from '@/types/common.ts';
 import { useCategories } from '@/hooks';
-import { ParentBudget } from '@/pages/Budgets/components/BudgetList/ParentBudget.tsx';
 import { useState } from 'react';
-import Modal from '@/components/ui/Modal.tsx';
-import { EditBudgetForm } from '@/modals/EditBudgetForm.tsx';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
-
-export interface IBudgetsListProps {
-  budgets: { all: Budget[], childBudgets: Budget[], parentBudgets: Budget[] };
-  currency: string;
-  isLoading: boolean;
-  onDeleteBudget: (id: string) => void;
-  onShowAdd: () => void;
-}
+import { ParentBudget } from '@/pages/Budgets/components/BudgetList/ParentBudget.tsx';
+import { EditBudgetForm } from '@/modals/EditBudgetForm.tsx';
+import Modal from '@/components/ui/Modal.tsx';
+import { IBudgetsBudgetListProps, TBudgetEditPayload } from '@/types/Budgets.ts';
 
 export function BudgetList({
   budgets,
   currency,
   isLoading,
-  onDeleteBudget,
   onShowAdd,
-}: IBudgetsListProps) {
+}: IBudgetsBudgetListProps) {
   const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
   const { all: categories = [] } = catData || {};
 
@@ -44,7 +36,7 @@ export function BudgetList({
     });
   };
 
-  const handleOnShowEdit = (val: any) => {
+  const handleOnShowEdit = (val: TBudgetEditPayload) => {
     setEditing(val);
   };
 
@@ -79,15 +71,17 @@ export function BudgetList({
   }
 
   return (
-    <div className="grid grid-cols-3 gap-3">
-      {budgets.parentBudgets.map((b) => (
+    <div
+      className="space-y-4 overflow-y-auto max-h-[calc(100vh_-_330px)] xl:max-h-[calc(100vh_-_300px)]"
+    >
+      {budgets.parents.map((b) => (
         <ParentBudget
+          key={b.id}
           budget={b}
           categories={categories}
-          childBudgets={budgets.childBudgets}
+          childBudgets={budgets.children}
           currency={currency}
           isExpanded={isExpanded(b.id)}
-          onDelete={onDeleteBudget}
           onEdit={handleOnShowEdit}
           onExpand={handleOnExpand}
         />

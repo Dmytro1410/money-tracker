@@ -100,6 +100,7 @@ export interface ITransactionsPageComponentProps {
   filteredTransactions: ITransaction[]
   isLoading: boolean,
   onFilter: (f: TRANSACTION_TYPES) => void,
+  onResetSearch: () => void,
   onSearch: (s: string) => void,
   onShowTxModal: (tx?: ITransaction) => void,
   search: string,
@@ -121,7 +122,7 @@ export type ITransactionsPageListItemProps = Pick<ITransactionsPageComponentProp
 }
 
 export type ITransactionsPageListProps = Pick<
-  ITransactionsPageComponentProps, 'currency' | 'filteredTransactions' | 'isLoading' | 'search' | 'onShowTxModal'
+  ITransactionsPageComponentProps, 'currency' | 'filteredTransactions' | 'isLoading' | 'search' | 'onShowTxModal' | 'onResetSearch'
 >
 
 export type ITransactionsPageSummaryProps = Pick<
