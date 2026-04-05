@@ -27,9 +27,7 @@ export default function AddBudgetForm({ onClose }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
-  const categories = catData?.all ?? [];
-  const parents = catData?.parents ?? [];
-  const children = catData?.children ?? [];
+  const { all: categories = [], children = [], parents = [] } = catData || {};
 
   useEffect(() => {
     if (categories.length > 0 && !categoryId) setCategoryId(categories[0].id);

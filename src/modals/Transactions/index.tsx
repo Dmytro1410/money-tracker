@@ -15,6 +15,7 @@ export default function TransactionForm({
     date: txDate,
     id: txId,
     note: txNote,
+    transfer_pair_id: txPairId,
     transfer_to_account_id: txToAccountId,
     type: txType,
   } = (transaction || {} as ITransaction);
@@ -29,15 +30,14 @@ export default function TransactionForm({
   const [toAccountId, setToAccountId] = useState(txToAccountId ?? '');
   const [parentCatId, setParentCatId] = useState(txParentCatId ?? '');
   const [categoryId, setCategoryId] = useState(txCategoryId ?? '');
-  const [date, setDate] = useState(txDate ?? new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(txDate ?? new Date().toISOString());
   const [note, setNote] = useState(txNote ?? '');
   const [tags, setTags] = useState(txTags ?? '');
 
   const { data: accounts = [] } = useAccounts();
   const { data: catData } = useCategories(type);
 
-  const parents = catData?.parents ?? [];
-  const children = catData?.children ?? [];
+  const { children = [], parents = [] } = catData || {};
   const subCategories = children.filter((c) => c.parent_id === parentCatId);
 
   const activeClass = TABS.find((t) => t.value === type)?.activeClass ?? '';
@@ -59,25 +59,21 @@ export default function TransactionForm({
 
   const handleOnSetType = (t: TRANSACTION_TYPES) => {
     setType(t);
-    // reset all fields when changing transaction type
-    setAmount('');
-    setAccountId('');
-    setToAccountId('');
+    // reset categories when changing transaction type
     setParentCatId('');
     setCategoryId('');
-    setDate(new Date().toISOString().slice(0, 10));
-    setNote('');
-    setTags('');
   };
 
   const handleOnSubmit = () => {
     const basePayload = {
-      accountId, amount, date, note, tags, type, categoryId: finalCategoryId,
+      accountId, amount, date, note, tags, type, categoryId: finalCategoryId, toAccountId,
     };
     if (txId) {
-      editTx({ ...basePayload, id: txId as string });
+      editTx({
+        ...basePayload, id: txId as string, pairId: txPairId,
+      });
     } else {
-      submitTx({ ...basePayload, toAccountId });
+      submitTx({ ...basePayload });
     }
   };
 

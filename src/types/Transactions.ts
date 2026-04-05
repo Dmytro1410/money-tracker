@@ -89,7 +89,7 @@ export type ITransactionFormTagsEditorProps = Pick<
 >
 
 export type ITransactionFormTypeSelectorProps = Pick<
-  ITransactionFormComponentProps, 'type' | 'onSetType'
+  ITransactionFormComponentProps, 'isEdit' | 'type' | 'onSetType'
 >;
 
 // Page interfaces

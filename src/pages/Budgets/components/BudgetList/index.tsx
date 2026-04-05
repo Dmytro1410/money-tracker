@@ -22,7 +22,7 @@ export function BudgetList({
   onShowAdd,
 }: IBudgetsListProps) {
   const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
-  const categories = catData?.all ?? [];
+  const { all: categories = [] } = catData || {};
 
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [editing, setEditing] = useState<{

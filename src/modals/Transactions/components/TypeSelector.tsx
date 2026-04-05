@@ -1,10 +1,22 @@
-import { TABS } from '@/constants/Transactions.ts';
+import { TABS, TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { ITransactionFormTypeSelectorProps } from '@/types/Transactions.ts';
 
-export function TypeSelector({ onSetType, type }: ITransactionFormTypeSelectorProps) {
+const availableTypesOnEdit:
+  Record<TRANSACTION_TYPES, TRANSACTION_TYPES[]> = {
+    [TRANSACTION_TYPES.ALL]: [],
+    [TRANSACTION_TYPES.INCOME]: [TRANSACTION_TYPES.INCOME, TRANSACTION_TYPES.EXPENSE],
+    [TRANSACTION_TYPES.EXPENSE]: [TRANSACTION_TYPES.INCOME, TRANSACTION_TYPES.EXPENSE],
+    [TRANSACTION_TYPES.TRANSFER]: [TRANSACTION_TYPES.TRANSFER],
+  };
+
+export function TypeSelector({ isEdit, onSetType, type }: ITransactionFormTypeSelectorProps) {
+  const filteredTabs = TABS.filter((t) => {
+    if (!isEdit) return true;
+    return availableTypesOnEdit[type].includes(t.value);
+  });
   return (
     <div className="flex rounded-xl overflow-hidden bg-night-700">
-      {TABS.map((tab) => (
+      {filteredTabs.map((tab) => (
         <button
           key={tab.value}
           className={`flex-1 py-2.5 text-sm transition-colors ${

@@ -46,7 +46,7 @@ export function TransactionsModalComponent({
   };
   return (
     <div className="space-y-4">
-      <TypeSelector type={type} onSetType={onSetType} />
+      <TypeSelector isEdit={isEdit} type={type} onSetType={onSetType} />
 
       <Amount
         accountId={accountId}

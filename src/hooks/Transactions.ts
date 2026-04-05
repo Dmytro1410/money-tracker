@@ -13,12 +13,37 @@ interface ITransactionBasePayload {
   date: string
   note: string
   tags: string
+  toAccountId: string
   type: TRANSACTION_TYPES;
 }
 
-interface ITransactionSubmitParams extends ITransactionBasePayload {
-  toAccountId: string
+interface ITransactionTransferPayload extends Omit<ITransactionBasePayload, 'amount' | 'accountId' | 'categoryId' | 'tags' | 'toAccountId'> {
+  account_id: string;
+  amount: number;
+  category_id: string | null;
+  tags: string[];
 }
+
+const createTransfer = async (
+  { base, toAccountId }: { base: ITransactionTransferPayload; toAccountId: string },
+) => {
+  if (!toAccountId || toAccountId === base.account_id) throw new Error('Select account for transfer');
+
+  const { data: d1, error: e1 } = await supabase
+    .from('transactions')
+    .insert({ ...base, transfer_to_account_id: toAccountId })
+    .select('id').single();
+  if (e1) throw e1;
+
+  const { data: d2, error: e2 } = await supabase
+    .from('transactions')
+    .insert({ ...base, account_id: toAccountId, transfer_to_account_id: toAccountId })
+    .select('id').single();
+  if (e2) throw e2;
+
+  await supabase.from('transactions').update({ transfer_pair_id: d2.id }).eq('id', d1.id);
+  await supabase.from('transactions').update({ transfer_pair_id: d1.id }).eq('id', d2.id);
+};
 
 const baseAddEditValidation = (
   { parsed, payload }: { payload: ITransactionBasePayload; parsed: number },
@@ -71,7 +96,7 @@ export function useAddTransaction(_onSuccess?: () => void) {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: ITransactionSubmitParams) => {
+    mutationFn: async (payload: ITransactionBasePayload) => {
       const {
         accountId, amount, categoryId, date, note, tags, toAccountId, type,
       } = payload;
@@ -88,22 +113,7 @@ export function useAddTransaction(_onSuccess?: () => void) {
       };
 
       if (type === TRANSACTION_TYPES.TRANSFER) {
-        if (!toAccountId || toAccountId === accountId) throw new Error('Select account for transfer');
-
-        const { data: d1, error: e1 } = await supabase
-          .from('transactions')
-          .insert({ ...base, transfer_to_account_id: toAccountId })
-          .select('id').single();
-        if (e1) throw e1;
-
-        const { data: d2, error: e2 } = await supabase
-          .from('transactions')
-          .insert({ ...base, account_id: toAccountId, transfer_to_account_id: toAccountId })
-          .select('id').single();
-        if (e2) throw e2;
-
-        await supabase.from('transactions').update({ transfer_pair_id: d2.id }).eq('id', d1.id);
-        await supabase.from('transactions').update({ transfer_pair_id: d1.id }).eq('id', d2.id);
+        await createTransfer({ base, toAccountId });
       } else {
         const { error } = await supabase.from('transactions').insert({ ...base });
         if (error) throw error;
@@ -118,6 +128,7 @@ export function useAddTransaction(_onSuccess?: () => void) {
 
 interface ITransactionUpdateParams extends ITransactionBasePayload {
   id: string
+  pairId: string | null
 }
 
 export default function useUpdateTransactionMutation(_onSuccess?: () => void) {
@@ -126,23 +137,32 @@ export default function useUpdateTransactionMutation(_onSuccess?: () => void) {
   return useMutation({
     mutationFn: async (payload: ITransactionUpdateParams) => {
       const {
-        accountId, amount, categoryId, date, id, note, tags, type,
+        accountId, amount, categoryId, date, id, note, pairId, tags, toAccountId, type,
       } = payload;
       const parsed = parseFloat(amount);
       baseAddEditValidation({ payload, parsed });
-      if (type === 'transfer') throw new Error('Cannot edit transfer transactions directly');
+      const base = {
+        date,
+        note,
+        type,
+        account_id: accountId,
+        amount: parsed,
+        category_id: categoryId,
+        tags: buildTagList(tags),
+      };
+      if (type === TRANSACTION_TYPES.TRANSFER) {
+        // nullify pair links to prevent auto-delete trigger from firing
+        await supabase.from('transactions').update({ transfer_pair_id: null }).eq('id', id);
+        await supabase.from('transactions').update({ transfer_pair_id: null }).eq('id', pairId);
+        // delete both (balance trigger will roll back both accounts)
+        await supabase.from('transactions').delete().eq('id', id);
+        await supabase.from('transactions').delete().eq('id', pairId);
+        await createTransfer({ base, toAccountId });
+      }
 
       const { error } = await supabase
         .from('transactions')
-        .update({
-          date,
-          note,
-          type,
-          account_id: accountId,
-          amount: parsed,
-          category_id: categoryId,
-          tags: buildTagList(tags),
-        })
+        .update({ ...base })
         .eq('id', id);
 
       if (error) throw error;
