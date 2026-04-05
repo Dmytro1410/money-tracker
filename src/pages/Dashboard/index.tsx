@@ -13,7 +13,7 @@ export default function Dashboard() {
   const { data: accounts = [] } = useAccounts();
   const {
     data: budgets = {
-      all: [], childBudgets: [], parentBudgets: [],
+      all: [], children: [], parents: [],
     },
   } = useBudgets();
 

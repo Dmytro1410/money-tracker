@@ -4,7 +4,7 @@ import '../styles.css';
 import { getPct, sortByLeftover } from '@/pages/Dashboard/utils.ts';
 
 export interface IDashboardBudgetsProps {
-  budgets: { all: Budget[], childBudgets: Budget[], parentBudgets: Budget[] }
+  budgets: { all: Budget[], children: Budget[], parents: Budget[] }
   currency: string
 }
 
@@ -18,7 +18,7 @@ export function Budgets({ budgets, currency }: IDashboardBudgetsProps) {
         </span>
       </div>
       <div className="dashboard-section-container">
-        {budgets.parentBudgets.slice(0, 12).sort(sortByLeftover).map((b) => {
+        {budgets.parents.slice(0, 12).sort(sortByLeftover).map((b) => {
           const pct = getPct(b);
           const over = pct >= 100;
           return (

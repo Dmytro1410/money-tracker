@@ -8,7 +8,7 @@ import { ITransaction } from '@/types/Transactions.ts';
 
 export interface IDashboardComponentProps {
   accounts: Account[]
-  budgets: { all: Budget[], childBudgets: Budget[], parentBudgets: Budget[] };
+  budgets: { all: Budget[], children: Budget[], parents: Budget[] };
   currency: string;
   firstName: string;
   monthExpense: number;
