@@ -1,10 +1,10 @@
-import { Budget } from '@/types/common.ts';
 import { formatCurrency } from '@/lib/formatters.ts';
 import '../styles.css';
 import { getPct, sortByLeftover } from '@/pages/Dashboard/utils.ts';
+import { IBudget } from '@/types/Budgets.ts';
 
 export interface IDashboardBudgetsProps {
-  budgets: { all: Budget[], children: Budget[], parents: Budget[] }
+  budgets: { all: IBudget[], children: IBudget[], parents: IBudget[] }
   currency: string
 }
 
