@@ -24,9 +24,33 @@ export interface ITransaction {
   type: TRANSACTION_TYPES
 }
 
+export interface ITransactionBasePayload {
+  accountId: string;
+  amount: string
+  categoryId: string | null
+  date: string
+  note: string
+  tags: string
+  toAccountId: string
+  type: TRANSACTION_TYPES;
+}
+
+export interface ITransactionTransferPayload extends Omit<ITransactionBasePayload, 'amount' | 'accountId' | 'categoryId' | 'tags' | 'toAccountId'> {
+  account_id: string;
+  amount: number;
+  category_id: string | null;
+  tags: string[];
+}
+
+export interface ITransactionUpdateParams extends ITransactionBasePayload {
+  id: string
+  pairId: string | null
+}
+
 // Modal interfaces
 
 export interface ITransactionFormProps {
+  filter: ITransaction['type'];
   transaction?: ITransaction | null;
   onClose: () => void
 }
@@ -68,16 +92,8 @@ export type ITransactionFormAccountsProps = Pick<
   'accountId' | 'accounts' | 'onSetAccountId' | 'onSetToAccountId' | 'toAccountId' | 'type'
 >
 
-export type ITransactionFormAmountProps = Pick<
-  ITransactionFormComponentProps, 'accountId' | 'accounts' | 'amount' | 'onSetAmount'
->;
-
 export type ITransactionFormCategoriesProps = Pick<
   ITransactionFormComponentProps, 'activeClass' | 'categoryId' | 'parentCatId' | 'parents' | 'subCategories' | 'onSetCategoryId' | 'onSetParentCatyId'
->;
-
-export type ITransactionFormDateSelectorProps = Pick<
-  ITransactionFormComponentProps, 'date' | 'onSetDate'
 >;
 
 export type ITransactionFormNoteEditorProps = Pick<
@@ -112,13 +128,9 @@ export type ITransactionsPageFiltersProps = Pick<
   ITransactionsPageComponentProps, 'filter' | 'search' | 'onFilter' | 'onSearch'
 >
 
-export type ITransactionsPageHeaderProps = Pick<
-  ITransactionsPageComponentProps, 'onShowTxModal'
->
-
 export type ITransactionsPageListItemProps = Pick<ITransactionsPageComponentProps, 'currency'> & {
   transaction: ITransaction,
-  onClick: (tx?: ITransaction) => void,
+  onEdit: (tx?: ITransaction) => void,
 }
 
 export type ITransactionsPageListProps = Pick<

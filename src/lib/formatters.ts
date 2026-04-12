@@ -1,5 +1,6 @@
 import { format, formatDistanceToNow, parseISO } from 'date-fns';
 import { enCA } from 'date-fns/locale';
+import { ChangeEvent } from 'react';
 
 // ─── Деньги ─────────────────────────────────────────────────────────
 export function formatCurrency(
@@ -66,3 +67,21 @@ export function calcDepositIncome(
   }
   return amount * r * (termMonths / 12);
 }
+
+export const getFormattedInputNumber = (val: string | number) => {
+  if (!val) return '';
+  const number = parseFloat(val.toString().replace(/,/g, ''));
+  if (Number.isNaN(number)) return '';
+
+  return new Intl.NumberFormat('en-US').format(number);
+};
+
+export const parseOnChangeInputNumber = (
+  e: ChangeEvent<HTMLInputElement>,
+  onChange: (val: string) => void,
+) => {
+  const rawValue = e.target.value.replace(/,/g, '');
+  if (/^\d*\.?\d*$/.test(rawValue)) {
+    onChange(rawValue);
+  }
+};

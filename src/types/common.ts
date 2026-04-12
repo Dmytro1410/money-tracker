@@ -55,23 +55,6 @@ export interface Category {
 // ─── Транзакции ──────────────────────────────────────────────────────
 export type RecurRule = 'daily' | 'weekly' | 'monthly' | 'yearly'
 
-// ─── Бюджеты ─────────────────────────────────────────────────────────
-export type BudgetPeriod = 'month' | 'quarter' | 'year'
-
-export interface Budget {
-  id: string
-  user_id: string
-  category_id: string
-  children_amount: number
-  parent_category_id: string | null
-  amount: number
-  period: BudgetPeriod
-  year: number
-  month: number | null
-  spent?: number
-  category?: Pick<Category, 'id' | 'name' | 'icon' | 'color'>
-}
-
 // ─── Вклады ──────────────────────────────────────────────────────────
 export interface Deposit {
   id: string

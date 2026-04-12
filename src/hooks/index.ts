@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import type {
-  Account, AccountType, Budget, BudgetPeriod, Category, PeriodSummary, RecurRule,
+  Account, AccountType, Category, PeriodSummary,
 } from '@/types/common.ts';
 import { ITransaction } from '@/types/Transactions.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
@@ -15,43 +15,6 @@ export type AddAccountPayload = {
   name: string
   type: AccountType
   user_id: string
-}
-
-export type SubmitTransactionPayload = {
-  account_id: string
-  amount: number
-  category_id: string | null
-  date: string
-  from_account_name?: string
-  is_recurring: boolean
-  note: string | null
-  recur_end_date: string | null
-  recur_rule: RecurRule | null
-  tags: string[]
-  to_account_id?: string
-  to_account_name?: string
-  type: TRANSACTION_TYPES
-}
-
-export type AddBudgetPayload = {
-  amount: number
-  category_id: string
-  month: number | null
-  parent_category_id?: string
-  period: BudgetPeriod
-  user_id: string
-  year: number
-}
-
-export type EditBudgetPayload = {
-  amount: number
-  category_id: string
-  edit_id?: string
-  month: number | null
-  parent_category_id?: string
-  period: BudgetPeriod
-  user_id: string
-  year: number
 }
 
 export type SaveCategoryPayload = {
@@ -111,160 +74,20 @@ export function useCategories(type: TRANSACTION_TYPES) {
 }
 
 // ─── Budgets ─────────────────────────────────────────────────
-export function useUpsertBudget() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (budget: Omit<Budget, 'id' | 'spent' | 'category'>) => {
-      const { data, error } = await supabase
-        .from('budgets')
-        .upsert(budget, { onConflict: 'user_id,category_id,year,month' })
-        .select().single();
-      if (error) throw error;
-      return data as Budget;
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['budgets'] }),
-  });
-}
-
-export function useAddBudget() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (p: AddBudgetPayload) => {
-      if (p.amount <= 0) throw new Error('Введите корректную сумму');
-      if (!p.category_id) throw new Error('Выберите категорию');
-
-      const base = {
-        user_id: p.user_id, period: p.period, year: p.year, month: p.month,
-      };
-
-      // Автоматически создаём родительский бюджет если выбрана подкатегория
-      if (p.parent_category_id) {
-        const { error: parentErr } = await supabase.from('budgets').upsert(
-          { ...base, category_id: p.parent_category_id, amount: 0 },
-          { onConflict: 'user_id,category_id,year,month', ignoreDuplicates: true },
-        );
-        if (parentErr) console.warn('parent budget:', parentErr.message);
-      }
-
-      const { error } = await supabase.from('budgets').upsert(
-        { ...base, category_id: p.category_id, amount: p.amount },
-        { onConflict: 'user_id,category_id,year,month' },
-      );
-      if (error) throw error;
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['budgets'] }),
-  });
-}
-
-export function useEditBudget() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (p: EditBudgetPayload) => {
-      if (p.amount <= 0) throw new Error('Введите корректную сумму');
-
-      if (p.edit_id) {
-        const { error } = await supabase
-          .from('budgets').update({ amount: p.amount, period: p.period }).eq('id', p.edit_id);
-        if (error) throw error;
-      } else {
-        const base = {
-          user_id: p.user_id, period: p.period, year: p.year, month: p.month,
-        };
-        if (p.parent_category_id) {
-          await supabase.from('budgets').upsert(
-            { ...base, category_id: p.parent_category_id, amount: 0 },
-            { onConflict: 'user_id,category_id,year,month', ignoreDuplicates: true },
-          );
-        }
-        const { error } = await supabase.from('budgets').upsert(
-          { ...base, category_id: p.category_id, amount: p.amount },
-          { onConflict: 'user_id,category_id,year,month' },
-        );
-        if (error) throw error;
-      }
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['budgets'] }),
-  });
-}
-
-export function useDeleteBudget() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from('budgets').delete().eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['budgets'] }),
-  });
-}
-
-// ─── Transactions (submit with transfer pair) ─────────────────
-export function useSubmitTransaction() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (p: SubmitTransactionPayload) => {
-      if (p.amount <= 0) throw new Error('Введите корректную сумму');
-      if (!p.account_id) throw new Error('Выберите счёт');
-
-      const base = {
-        category_id: p.category_id,
-        date: p.date,
-        is_recurring: p.is_recurring,
-        note: p.note,
-        recur_end_date: p.recur_end_date,
-        recur_rule: p.recur_rule,
-        tags: p.tags,
-      };
-
-      if (p.type === 'transfer') {
-        if (!p.to_account_id || p.to_account_id === p.account_id) throw new Error('Выберите счёт назначения');
-
-        // Списание: transfer_to_account_id != account_id → триггер минусует
-        const { data: d1, error: e1 } = await supabase
-          .from('transactions')
-          .insert({
-            ...base,
-            account_id: p.account_id,
-            transfer_to_account_id: p.to_account_id,
-            amount: p.amount,
-            type: 'transfer',
-            note: p.note ?? `Перевод → ${p.to_account_name}`,
-          })
-          .select('id').single();
-        if (e1) throw e1;
-
-        // Зачисление: transfer_to_account_id == account_id → триггер плюсует
-        const { data: d2, error: e2 } = await supabase
-          .from('transactions')
-          .insert({
-            ...base,
-            account_id: p.to_account_id,
-            transfer_to_account_id: p.to_account_id,
-            amount: p.amount,
-            type: 'transfer',
-            note: p.note ?? `Перевод ← ${p.from_account_name}`,
-          })
-          .select('id').single();
-        if (e2) throw e2;
-
-        // Связываем пару для авто-удаления
-        await supabase.from('transactions').update({ transfer_pair_id: d2.id }).eq('id', d1.id);
-        await supabase.from('transactions').update({ transfer_pair_id: d1.id }).eq('id', d2.id);
-      } else {
-        const { error } = await supabase.from('transactions').insert({
-          ...base, account_id: p.account_id, amount: p.amount, type: p.type,
-        });
-        if (error) throw error;
-      }
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['transactions'] });
-      qc.invalidateQueries({ queryKey: ['accounts'] });
-      qc.invalidateQueries({ queryKey: ['analytics'] });
-      qc.invalidateQueries({ queryKey: ['budgets'] });
-    },
-  });
-}
+// export function useUpsertBudget() {
+//   const qc = useQueryClient();
+//   return useMutation({
+//     mutationFn: async (budget: Omit<Budget, 'id' | 'spent' | 'category'>) => {
+//       const { data, error } = await supabase
+//         .from('budgets')
+//         .upsert(budget, { onConflict: 'user_id,category_id,year,month' })
+//         .select().single();
+//       if (error) throw error;
+//       return data as Budget;
+//     },
+//     onSuccess: () => qc.invalidateQueries({ queryKey: ['budgets'] }),
+//   });
+// }
 
 // ─── Categories (mutations) ───────────────────────────────────
 export function useSaveCategory() {

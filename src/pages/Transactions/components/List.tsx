@@ -22,7 +22,7 @@ export function List({
           key={tx.id}
           currency={currency}
           transaction={tx}
-          onClick={onShowTxModal}
+          onEdit={onShowTxModal}
         />
       ))}
       {filteredTransactions.length === 0 && (

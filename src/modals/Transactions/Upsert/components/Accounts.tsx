@@ -1,4 +1,4 @@
-import Select from '@/components/ui/Select.tsx';
+import Select from '@/components/Select.tsx';
 import { ITransactionFormAccountsProps } from '@/types/Transactions.ts';
 
 export function Accounts({

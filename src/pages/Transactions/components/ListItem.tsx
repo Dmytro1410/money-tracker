@@ -2,8 +2,9 @@ import { formatCurrency, formatDate } from '@/lib/formatters.ts';
 import { ITransactionsPageListItemProps } from '@/types/Transactions.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { useCategories } from '@/hooks';
+import { EditIconButton } from '@/components/Buttons/EditIconButton.tsx';
 
-export function ListItem({ currency, onClick, transaction }: ITransactionsPageListItemProps) {
+export function ListItem({ currency, onEdit, transaction }: ITransactionsPageListItemProps) {
   const { data } = useCategories(transaction.type);
   const { parents } = data || {};
   const getTransactionIcon = () => {
@@ -55,8 +56,7 @@ export function ListItem({ currency, onClick, transaction }: ITransactionsPageLi
   return (
     <div
       key={transaction.id}
-      className="flex items-center gap-3 px-4 py-3 group hover:bg-white/3 transition-colors hover:cursor-pointer hover:bg-white/5"
-      onClick={() => onClick(transaction)}
+      className="flex items-center gap-3 px-4 py-3 group"
     >
       <div
         className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
@@ -92,7 +92,7 @@ export function ListItem({ currency, onClick, transaction }: ITransactionsPageLi
         {getTransactionSign()}
         {formatCurrency(transaction.amount, transaction.account?.currency ?? currency)}
       </span>
-
+      <EditIconButton onEdit={() => onEdit(transaction)} />
     </div>
   );
 }
