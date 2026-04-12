@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores';
 import type { Category } from '@/types/common.ts';
-import Modal from '@/components/ui/Modal';
+import Modal from '@/components/Modal.tsx';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 const TYPES: { value: TRANSACTION_TYPES; label: string }[] = [

@@ -7,7 +7,7 @@ import type { Profile } from '@/types/common.ts';
 import AppLayout from '@/components/layout/AppLayout';
 import Dashboard from '@/pages/Dashboard';
 import Transactions from '@/pages/Transactions';
-import Budgets from '@/pages/Budgets';
+import BudgetsPage from '@/pages/Budgets';
 import Analytics from '@/pages/Analytics';
 import Accounts from '@/pages/Accounts';
 import Login from '@/pages/Login';
@@ -105,7 +105,7 @@ export default function App() {
         <Route index element={<Navigate replace to={RouteNames.Dashboard} />} />
         <Route element={<Dashboard />} path={RouteNames.Dashboard} />
         <Route element={<Transactions />} path={RouteNames.Transactions} />
-        <Route element={<Budgets />} path={RouteNames.Budgets} />
+        <Route element={<BudgetsPage />} path={RouteNames.Budgets} />
         <Route element={<Analytics />} path={RouteNames.Analytics} />
         <Route element={<Accounts />} path={RouteNames.Accounts} />
         <Route element={<Categories />} path={RouteNames.Categories} />

@@ -14,13 +14,18 @@ export function TypeSelector({ isEdit, onSetType, type }: ITransactionFormTypeSe
     if (!isEdit) return true;
     return availableTypesOnEdit[type].includes(t.value);
   });
+
+  const isSelected = (tab: typeof TABS[number]) => {
+    if (type === TRANSACTION_TYPES.ALL) return tab.value === TRANSACTION_TYPES.EXPENSE;
+    return type === tab.value;
+  };
   return (
     <div className="flex rounded-xl overflow-hidden bg-night-700">
       {filteredTabs.map((tab) => (
         <button
           key={tab.value}
           className={`flex-1 py-2.5 text-sm transition-colors ${
-            type === tab.value ? `${tab.activeClass} font-700` : 'text-white/40 hover:text-white/70 font-600'
+            isSelected(tab) ? `${tab.activeClass} font-700` : 'text-white/40 hover:text-white/70 font-600'
           }`}
           type="button"
           onClick={() => onSetType(tab.value)}

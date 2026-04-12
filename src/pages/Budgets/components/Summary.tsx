@@ -1,16 +1,22 @@
 import { creditUsagePercent, formatCurrency } from '@/lib/formatters.ts';
 import { StatsRow } from '@/pages/Budgets/components/StatsRow.tsx';
 import { OverSpendWarning } from '@/pages/Budgets/components/OverSpendWarning.tsx';
-import { IBudgetsSummaryProps } from '@/types/Budgets.ts';
+import { useGetBudgets } from '@/hooks/Budgets.ts';
+import { getPct, getTotalLimit, getTotalSpent } from '@/pages/Budgets/utils.ts';
+import { useAuthStore } from '@/stores';
 
-export function Summary({
-  currency,
-  totalLimit,
-  totalPct,
-  totalSpent,
-}: IBudgetsSummaryProps) {
+export function BudgetsPageSummary() {
+  const profile = useAuthStore((s) => s.profile);
+  const {
+    data: budgets = { all: [], parents: [], children: [] },
+  } = useGetBudgets();
+
+  const totalLimit = getTotalLimit(budgets.parents);
+  const totalSpent = getTotalSpent(budgets.children);
+  const totalPct = getPct({ limit: totalLimit, spent: totalSpent });
   const over = totalPct >= 100;
   const remaining = totalLimit - (totalSpent ?? 0);
+  const currency = profile?.currency ?? 'CAD';
 
   return (
     <div className="card-gradient p-5 h-36">
@@ -35,7 +41,6 @@ export function Summary({
       </div>
       <StatsRow currency={currency} limit={totalLimit} spent={totalSpent} />
 
-      {/* Overspend warning */}
       {over && <OverSpendWarning currency={currency} remaining={remaining} />}
     </div>
   );

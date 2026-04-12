@@ -1,16 +1,17 @@
-import { Budget, Category } from '@/types/common.ts';
+import { Category } from '@/types/common.ts';
+import { IBudget } from '@/types/Budgets.ts';
 
-export const getTotalLimit = (budgets: Budget[]) => budgets.reduce((s, b) => s + b.amount, 0);
+export const getTotalLimit = (bds: IBudget[]) => bds.reduce((s, b) => s + b.amount, 0);
 
-export const getTotalSpent = (budgets: Budget[]) => budgets.reduce((s, b) => s + (b.spent ?? 0), 0);
+export const getTotalSpent = (bds: IBudget[]) => bds.reduce((s, b) => s + (b.spent ?? 0), 0);
 
-export const getTotalPct = ({
-  totalLimit, totalSpent,
+export const getPct = ({
+  limit, spent,
 }: {
-  totalLimit: number; totalSpent: number
+  limit: number; spent: number
 }) => {
-  if (totalLimit > 0) {
-    return Math.min(100, Math.round((totalSpent / totalLimit) * 100));
+  if (limit > 0) {
+    return Math.min(100, Math.round((spent / limit) * 100));
   }
   return 0;
 };
@@ -20,9 +21,9 @@ export const getParentStats = ({
   categories,
   childBudgets,
 }: {
-  budget: Budget;
+  budget: IBudget;
   categories: Category[];
-  childBudgets: Budget[];
+  childBudgets: IBudget[];
 }) => {
   const { amount, category_id: categoryId, spent } = budget;
   const subs = childBudgets.filter((b) => {
@@ -30,9 +31,9 @@ export const getParentStats = ({
     return cat?.parent_id === categoryId;
   });
   const subSpent = getTotalSpent(subs);
-  const subAmount = getTotalLimit(subs);
+  const subLimit = getTotalLimit(subs);
 
-  const totalAmount = subAmount > 0 ? subAmount : (amount ?? 0);
+  const totalLimit = subLimit > 0 ? subLimit : (amount ?? 0);
   const totalSpent = subSpent > 0 ? subSpent : (spent ?? 0);
-  return { subs, totalAmount, totalSpent };
+  return { subs, totalLimit, totalSpent };
 };

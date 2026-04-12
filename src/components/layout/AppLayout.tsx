@@ -55,31 +55,29 @@ export default function AppLayout() {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
         <header
-          className="xl:hidden flex items-center justify-between px-4 h-14 bg-night-900 border-b border-white/5 flex-shrink-0"
+          className="xl:hidden flex items-center justify-center px-4 h-14 bg-night-900 border-b border-white/5 flex-shrink-0"
         >
-          <LogoContainer />
-          <div className="flex items-center gap-4">
-            {isDatePickersPage && <MonthSelector />}
-            <button
-              className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-white/60 hover:text-white transition-colors"
-              type="button"
-              onClick={() => setSidebarOpen(true)}
+          <button
+            className="absolute left-4 w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <svg
+              fill="none"
+              height="18"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="18"
             >
-              <svg
-                fill="none"
-                height="18"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                width="18"
-              >
-                <line x1="3" x2="21" y1="6" y2="6" />
-                <line x1="3" x2="21" y1="12" y2="12" />
-                <line x1="3" x2="21" y1="18" y2="18" />
-              </svg>
-            </button>
-          </div>
+              <line x1="3" x2="21" y1="6" y2="6" />
+              <line x1="3" x2="21" y1="12" y2="12" />
+              <line x1="3" x2="21" y1="18" y2="18" />
+            </svg>
+          </button>
+          {isDatePickersPage && <MonthSelector />}
+
         </header>
 
         <main className="flex-1 overflow-y-auto bg-night-900">

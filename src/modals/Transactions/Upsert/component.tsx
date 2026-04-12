@@ -1,12 +1,12 @@
-import { TypeSelector } from '@/modals/Transactions/components/TypeSelector.tsx';
+import { TypeSelector } from '@/modals/Transactions/Upsert/components/TypeSelector.tsx';
 import { TABS } from '@/constants/Transactions.ts';
-import { Amount } from '@/modals/Transactions/components/Amount.tsx';
-import { Accounts } from '@/modals/Transactions/components/Accounts.tsx';
-import { Categories } from '@/modals/Transactions/components/Categories.tsx';
-import { NoteEditor } from '@/modals/Transactions/components/NoteEditor.tsx';
-import { TagsEditor } from '@/modals/Transactions/components/TagsEditor.tsx';
+import { Accounts } from '@/modals/Transactions/Upsert/components/Accounts.tsx';
+import { Categories } from '@/modals/Transactions/Upsert/components/Categories.tsx';
+import { NoteEditor } from '@/modals/Transactions/Upsert/components/NoteEditor.tsx';
+import { TagsEditor } from '@/modals/Transactions/Upsert/components/TagsEditor.tsx';
 import { ITransactionFormComponentProps } from '@/types/Transactions.ts';
 import { DatePicker } from '@/components/DatePicker';
+import { MoneyInput } from '@/components/MoneyInput.tsx';
 
 export function TransactionsModalComponent({
   accountId,
@@ -48,9 +48,8 @@ export function TransactionsModalComponent({
     <div className="space-y-4">
       <TypeSelector isEdit={isEdit} type={type} onSetType={onSetType} />
 
-      <Amount
+      <MoneyInput
         accountId={accountId}
-        accounts={accounts}
         amount={amount}
         onSetAmount={onSetAmount}
       />

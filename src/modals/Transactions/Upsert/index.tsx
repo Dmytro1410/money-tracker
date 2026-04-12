@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useAccounts, useCategories } from '@/hooks';
-import { TransactionsModalComponent } from '@/modals/Transactions/component.tsx';
-import useUpdateTransactionMutation, { useAddTransaction, useDeleteTransaction } from '@/hooks/Transactions.ts';
+import { TransactionsModalComponent } from '@/modals/Transactions/Upsert/component.tsx';
+import { useAddTransaction, useDeleteTransaction, useUpdateTransaction } from '@/hooks/Transactions.ts';
 import { TABS, TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { ITransaction, ITransactionFormProps } from '@/types/Transactions.ts';
 
 export default function TransactionForm({
+  filter,
   onClose,
   transaction,
 }: ITransactionFormProps) {
@@ -24,7 +25,7 @@ export default function TransactionForm({
   const txParentCatId: string | undefined | null = transaction?.category?.parent_id;
   const txTags: string | undefined = transaction?.tags?.join(',');
 
-  const [type, setType] = useState<TRANSACTION_TYPES>(txType ?? TRANSACTION_TYPES.EXPENSE);
+  const [type, setType] = useState<TRANSACTION_TYPES>(txType ?? filter);
   const [amount, setAmount] = useState(txAmount ?? '');
   const [accountId, setAccountId] = useState(txAccountId ?? '');
   const [toAccountId, setToAccountId] = useState(txToAccountId ?? '');
@@ -48,7 +49,7 @@ export default function TransactionForm({
   } = useAddTransaction(onClose);
   const {
     error: editError, isPending: isPendingEdit, mutate: editTx,
-  } = useUpdateTransactionMutation(onClose);
+  } = useUpdateTransaction(onClose);
   const {
     error: deleteError, isPending: isPendingDelete, mutate: deleteTx,
   } = useDeleteTransaction(onClose);

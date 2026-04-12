@@ -1,11 +1,11 @@
 import { formatCurrency } from '@/lib/formatters.ts';
-import { IBudgetsStatsRowProps } from '@/types/Budgets.ts';
+import { IBudgetsPageStatsRowProps } from '@/types/Budgets.ts';
 
 export function StatsRow({
   currency,
   limit,
   spent = 0,
-}: IBudgetsStatsRowProps) {
+}: IBudgetsPageStatsRowProps) {
   const remaining = limit - spent;
   return (
     <div className="flex items-center justify-between">

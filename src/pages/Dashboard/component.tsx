@@ -1,14 +1,15 @@
 import { Header } from '@/pages/Dashboard/components/Header.tsx';
 import { MainBalance } from '@/pages/Dashboard/components/MainBalance.tsx';
-import { Account, Budget } from '@/types/common.ts';
+import { Account } from '@/types/common.ts';
 import { Accounts } from '@/pages/Dashboard/components/Accounts.tsx';
 import { Budgets } from '@/pages/Dashboard/components/Budgets.tsx';
 import { RecentTransactions } from '@/pages/Dashboard/components/RecentTransactions.tsx';
 import { ITransaction } from '@/types/Transactions.ts';
+import { IBudget } from '@/types/Budgets.ts';
 
 export interface IDashboardComponentProps {
   accounts: Account[]
-  budgets: { all: Budget[], children: Budget[], parents: Budget[] };
+  budgets: { all: IBudget[], children: IBudget[], parents: IBudget[] };
   currency: string;
   firstName: string;
   monthExpense: number;

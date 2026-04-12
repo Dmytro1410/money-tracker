@@ -3,26 +3,13 @@ import {
 } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
-import { ITransaction } from '@/types/Transactions.ts';
+import {
+  ITransaction,
+  ITransactionBasePayload,
+  ITransactionTransferPayload,
+  ITransactionUpdateParams,
+} from '@/types/Transactions.ts';
 import { useUIStore } from '@/stores';
-
-interface ITransactionBasePayload {
-  accountId: string;
-  amount: string
-  categoryId: string | null
-  date: string
-  note: string
-  tags: string
-  toAccountId: string
-  type: TRANSACTION_TYPES;
-}
-
-interface ITransactionTransferPayload extends Omit<ITransactionBasePayload, 'amount' | 'accountId' | 'categoryId' | 'tags' | 'toAccountId'> {
-  account_id: string;
-  amount: number;
-  category_id: string | null;
-  tags: string[];
-}
 
 const createTransfer = async (
   { base, toAccountId }: { base: ITransactionTransferPayload; toAccountId: string },
@@ -62,7 +49,7 @@ const invalidateQueries = (qc: QueryClient) => {
   qc.invalidateQueries({ queryKey: ['budgets'] });
 };
 
-export function useTransactions() {
+export function useGetTransactions() {
   const { selectedMonth: month, selectedYear: year } = useUIStore();
   const from = new Date(year, month - 1, 1).toISOString().split('T')[0];
   const to = new Date(year, month, 0).toISOString().split('T')[0];
@@ -126,12 +113,7 @@ export function useAddTransaction(_onSuccess?: () => void) {
   });
 }
 
-interface ITransactionUpdateParams extends ITransactionBasePayload {
-  id: string
-  pairId: string | null
-}
-
-export default function useUpdateTransactionMutation(_onSuccess?: () => void) {
+export function useUpdateTransaction(_onSuccess?: () => void) {
   const qc = useQueryClient();
 
   return useMutation({

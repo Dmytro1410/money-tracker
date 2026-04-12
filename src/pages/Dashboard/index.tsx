@@ -2,20 +2,20 @@ import { useAuthStore } from '@/stores';
 import { useAccounts } from '@/hooks';
 import { DashboardComponent } from '@/pages/Dashboard/component.tsx';
 import { getMonthExpense, getMonthIncome, getTotalBalance } from '@/pages/Dashboard/utils.ts';
-import { useTransactions } from '@/hooks/Transactions.ts';
-import { useBudgets } from '@/hooks/Budgets.ts';
+import { useGetTransactions } from '@/hooks/Transactions.ts';
+import { useGetBudgets } from '@/hooks/Budgets.ts';
 
 export default function Dashboard() {
   const profile = useAuthStore((s) => s.profile);
   const currency = profile?.currency ?? 'CAD';
 
-  const { data: transactions = [] } = useTransactions();
+  const { data: transactions = [] } = useGetTransactions();
   const { data: accounts = [] } = useAccounts();
   const {
     data: budgets = {
       all: [], children: [], parents: [],
     },
-  } = useBudgets();
+  } = useGetBudgets();
 
   const totalBalance = getTotalBalance(accounts);
   const monthIncome = getMonthIncome(transactions);

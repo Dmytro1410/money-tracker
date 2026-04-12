@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useAuthStore } from '@/stores';
-import Modal from '@/components/ui/Modal';
-import TransactionForm from '@/modals/Transactions';
+import Modal from '@/components/Modal.tsx';
+import TransactionForm from '@/modals/Transactions/Upsert';
 import { TransactionsComponent } from '@/pages/Transactions/component.tsx';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { ITransaction } from '@/types/Transactions.ts';
-import { useTransactions } from '@/hooks/Transactions.ts';
+import { useGetTransactions } from '@/hooks/Transactions.ts';
 
 export default function Transactions() {
   const profile = useAuthStore((s) => s.profile);
@@ -15,7 +15,7 @@ export default function Transactions() {
   const [search, setSearch] = useState('');
   const [txToEdit, setTxToEdit] = useState<ITransaction | null>(null);
 
-  const { data: transactions = [], isLoading } = useTransactions();
+  const { data: transactions = [], isLoading } = useGetTransactions();
 
   const filtered = useMemo(() => transactions.filter((tx) => {
     if (filter !== 'all' && tx.type !== filter) return false;
@@ -27,7 +27,7 @@ export default function Transactions() {
   const totalExpense = useMemo(() => transactions.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0), [transactions]);
 
   const handleOnShowTxModal = (tx?: ITransaction) => {
-    setTxToEdit(tx ?? null);
+    if (tx) setTxToEdit(tx);
     setShowTxModal(true);
   };
 
@@ -69,6 +69,7 @@ export default function Transactions() {
         onClose={handleOnHideTxModal}
       >
         <TransactionForm
+          filter={filter}
           transaction={txToEdit}
           onClose={handleOnHideTxModal}
         />

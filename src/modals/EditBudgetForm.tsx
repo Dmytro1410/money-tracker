@@ -1,12 +1,13 @@
 import { useAuthStore, useUIStore } from '@/stores';
-import { BudgetPeriod } from '@/types/common.ts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useCategories } from '@/hooks';
 import { supabase } from '@/lib/supabase.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
+import { getFormattedInputNumber, parseOnChangeInputNumber } from '@/lib/formatters.ts';
+import { TBudgetPeriod } from '@/types/Budgets.ts';
 
-const PERIODS: { value: BudgetPeriod; label: string }[] = [
+const PERIODS: { value: TBudgetPeriod; label: string }[] = [
   { value: 'month', label: 'Месяц' },
   { value: 'quarter', label: 'Квартал' },
   { value: 'year', label: 'Год' },
@@ -18,7 +19,7 @@ export function EditBudgetForm({
   onClose: () => void
   editId?: string
   editAmount?: number
-  editPeriod?: BudgetPeriod
+  editPeriod?: TBudgetPeriod
   editCategoryId?: string
 }) {
   const profile = useAuthStore((s) => s.profile);
@@ -27,7 +28,7 @@ export function EditBudgetForm({
 
   const [categoryId, setCategoryId] = useState(editCategoryId ?? '');
   const [amount, setAmount] = useState(editAmount ? String(editAmount) : '');
-  const [period, setPeriod] = useState<BudgetPeriod>(editPeriod ?? 'month');
+  const [period, setPeriod] = useState<TBudgetPeriod>(editPeriod ?? 'month');
   const [error, setError] = useState<string | null>(null);
 
   const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
@@ -198,12 +199,13 @@ export function EditBudgetForm({
           <input
             autoFocus
             className="input text-xl font-800 pr-16"
-            min="0"
-            placeholder="0"
-            step="100"
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            inputMode="decimal"
+            placeholder="$0"
+            type="text"
+            value={getFormattedInputNumber(amount)}
+            onChange={(e) => {
+              parseOnChangeInputNumber(e, setAmount);
+            }}
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-white/25 font-600">
             {profile?.currency ?? 'RUB'}

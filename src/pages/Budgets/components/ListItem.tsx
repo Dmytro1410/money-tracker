@@ -1,10 +1,12 @@
 import { StatsRow } from '@/pages/Budgets/components/StatsRow.tsx';
 import { OverSpendWarning } from '@/pages/Budgets/components/OverSpendWarning.tsx';
 import { IBudgetsBudgetListItemProps } from '@/types/Budgets.ts';
+import { MouseEvent } from 'react';
+import { EditIconButton } from '@/components/Buttons/EditIconButton.tsx';
+import { useAuthStore } from '@/stores';
 
-export function ListItem({
+export function BudgetsPageListItem({
   budget,
-  currency,
   isExpanded,
   onEdit,
   onExpand,
@@ -14,28 +16,29 @@ export function ListItem({
   totalLimit,
   totalSpent,
 }: IBudgetsBudgetListItemProps) {
-  const handleOnExpand = () => {
+  const profile = useAuthStore((s) => s.profile);
+  const currency = profile?.currency ?? 'CAD';
+
+  const handleOnExpand = (e: MouseEvent) => {
+    e.stopPropagation();
     if (onExpand) onExpand(budget.id);
   };
 
   const handleOnEdit = () => {
-    if (onEdit) {
-      onEdit({
-        id: budget.id, amount: budget.amount, period: budget.period, categoryId: budget.category_id,
-      });
-    }
+    if (onEdit) onEdit(budget);
   };
 
   return (
     <div
       key={budget.id}
       className="card-dark p-5 group relative"
+      onClick={onExpand ? handleOnExpand : undefined}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2.5">
           {onExpand && (
             <button
-              className="w-5 h-5 flex items-center justify-center text-white/30 hover:text-white/60 transition-colors flex-shrink-0"
+              className="btn-icon"
               type="button"
               onClick={handleOnExpand}
             >
@@ -60,7 +63,6 @@ export function ListItem({
           </div>
           <div>
             <p className="font-700 text-white">{budget.category?.name}</p>
-            <p className="text-2xs text-white/25 font-500 mt-0.5 capitalize">{budget.period}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -69,25 +71,7 @@ export function ListItem({
             %
           </span>
           {onEdit && (
-            <button
-              className="btn-icon w-7 h-7"
-              title="Редактировать"
-              type="button"
-              onClick={handleOnEdit}
-            >
-              <svg
-                fill="none"
-                height="12"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                width="12"
-              >
-                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-            </button>
+            <EditIconButton onEdit={handleOnEdit} />
           )}
         </div>
       </div>
@@ -104,7 +88,6 @@ export function ListItem({
 
       <StatsRow currency={currency} limit={totalLimit} spent={totalSpent} />
 
-      {/* Overspend warning */}
       {over && (
         <OverSpendWarning currency={currency} remaining={remaining} />
       )}
