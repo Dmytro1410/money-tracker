@@ -94,32 +94,32 @@ const CategoriesIcon = (
 const NAV = [
   {
     to: '/dashboard',
-    label: 'Обзор',
+    label: 'Dashboard',
     icon: DashboardIcon,
   },
   {
     to: '/transactions',
-    label: 'Транзакции',
+    label: 'Transactions',
     icon: TransactionsIcon,
   },
   {
     to: '/budgets',
-    label: 'Бюджеты',
+    label: 'Budgets',
     icon: BudgetsIcon,
   },
   {
     to: '/analytics',
-    label: 'Аналитика',
+    label: 'Analytics',
     icon: AnalyticsIcon,
   },
   {
     to: '/accounts',
-    label: 'Счета',
+    label: 'Accounts',
     icon: AccountsIcon,
   },
   {
     to: '/categories',
-    label: 'Категории',
+    label: 'Categories',
     icon: CategoriesIcon,
   },
 ];
