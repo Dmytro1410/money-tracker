@@ -51,6 +51,7 @@ export function TransactionsModalComponent({
       <MoneyInput
         accountId={accountId}
         amount={amount}
+        label="Amount"
         onSetAmount={onSetAmount}
       />
 
