@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores';
-import type { Profile } from '@/types/common.ts';
 
 import AppLayout from '@/components/layout/AppLayout';
 import Dashboard from '@/pages/Dashboard';
@@ -10,71 +7,16 @@ import Transactions from '@/pages/Transactions';
 import BudgetsPage from '@/pages/Budgets';
 import Analytics from '@/pages/Analytics';
 import Accounts from '@/pages/Accounts';
-import Login from '@/pages/Login';
 import Categories from '@/pages/Categories';
+import Login from '@/pages/Login';
 import { RouteNames } from '@/constants.ts';
+import { useFetchProfile } from '@/hooks/Authentication.ts';
 
 export default function App() {
-  const { profile, setProfile } = useAuthStore();
-  const [initializing, setInitializing] = useState(true);
+  const { profile } = useAuthStore();
+  const { isPending } = useFetchProfile();
 
-  useEffect(() => {
-    let done = false;
-
-    function finish() {
-      if (!done) {
-        done = true;
-        setInitializing(false);
-      }
-    }
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (!session?.user) {
-          setProfile(null);
-          finish();
-          return;
-        }
-        if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-          await loadProfile(session.user.id, session.user.email ?? '');
-          finish();
-        }
-      },
-    );
-
-    const timeout = setTimeout(() => {
-      console.warn('auth timeout');
-      finish();
-    }, 6000);
-    return () => {
-      subscription.unsubscribe();
-      clearTimeout(timeout);
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function loadProfile(userId: string, email: string) {
-    try {
-      const { data } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
-      if (data) {
-        setProfile(data as Profile);
-        return;
-      }
-      const { data: created } = await supabase.from('profiles').upsert({ id: userId, email }).select().maybeSingle();
-      setProfile((created ?? {
-        id: userId,
-        email,
-        currency: 'CAD',
-        locale: 'en-CA',
-        created_at: new Date().toISOString(),
-      }) as Profile);
-    } catch {
-      setProfile({
-        id: userId, email, currency: 'CAD', locale: 'en-CA', created_at: new Date().toISOString(),
-      } as Profile);
-    }
-  }
-
-  if (initializing) {
+  if (isPending) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-3">

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useAccounts, useCategories } from '@/hooks';
+import { useCategories } from '@/hooks';
 import { TransactionsModalComponent } from '@/modals/Transactions/Upsert/component.tsx';
 import { useAddTransaction, useDeleteTransaction, useUpdateTransaction } from '@/hooks/Transactions.ts';
 import { TABS, TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { ITransaction, ITransactionFormProps } from '@/types/Transactions.ts';
+import { useFetchAccounts } from '@/hooks/Accounts.ts';
 
 export default function TransactionForm({
   filter,
@@ -35,7 +36,7 @@ export default function TransactionForm({
   const [note, setNote] = useState(txNote ?? '');
   const [tags, setTags] = useState(txTags ?? '');
 
-  const { data: accounts = [] } = useAccounts();
+  const { data: accounts = [] } = useFetchAccounts();
   const { data: catData } = useCategories(type);
 
   const { children = [], parents = [] } = catData || {};

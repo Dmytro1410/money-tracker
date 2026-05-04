@@ -1,20 +1,23 @@
 import { useState } from 'react';
-import { useAccounts } from '@/hooks';
 import { AccountsComponent } from '@/pages/Accounts/component.tsx';
-import AddAccountForm from '@/modals/Accounts';
+import AccountForm from '@/modals/Accounts/Upsert';
 import Modal from '@/components/Modal.tsx';
 import { getTotalBalance } from '@/pages/Accounts/utils.ts';
+import { Account } from '@/types/common.ts';
+import { useFetchAccounts } from '@/hooks/Accounts.ts';
 
 export default function Accounts() {
-  const { data: accounts = [], isLoading } = useAccounts();
-  const [showAdd, setShowAdd] = useState(false);
+  const { data: accounts = [], isLoading } = useFetchAccounts();
+  const [accToEdit, setAccToEdit] = useState<Account | undefined>(undefined);
+  const [showModal, setShowModal] = useState(false);
   const totalBalance = getTotalBalance(accounts);
 
-  const handleOnShowAdd = () => {
-    setShowAdd(true);
+  const handleOnShowModal = (account?: Account) => {
+    setAccToEdit(account);
+    setShowModal(true);
   };
-  const handleOnHideAdd = () => {
-    setShowAdd(false);
+  const handleOnHideModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -23,10 +26,15 @@ export default function Accounts() {
         accounts={accounts}
         isLoading={isLoading}
         totalBalance={totalBalance}
-        onShowAdd={handleOnShowAdd}
+        onShowModal={handleOnShowModal}
       />
-      <Modal open={showAdd} title="Новый счёт" onClose={handleOnHideAdd}>
-        <AddAccountForm onClose={handleOnHideAdd} />
+      <Modal
+        open={showModal}
+        title={accToEdit ? 'Edit account' : 'New account'}
+        width="4xl"
+        onClose={handleOnHideModal}
+      >
+        <AccountForm account={accToEdit} onClose={handleOnHideModal} />
       </Modal>
     </>
   );

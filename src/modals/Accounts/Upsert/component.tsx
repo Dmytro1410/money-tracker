@@ -1,4 +1,6 @@
 import { AccountType } from '@/types/common.ts';
+import { ACCOUNT_TYPES } from '@/constants/Accounts.ts';
+import { MoneyInput } from '@/components/MoneyInput.tsx';
 
 export interface IAccountsFormProps {
   balance: string;
@@ -6,7 +8,7 @@ export interface IAccountsFormProps {
   creditLimit: string;
   currency: string;
   error: string | null;
-  isLoading: boolean;
+  isPending: boolean;
   name: string;
   onChangeBalance: (b: string) => void;
   onChangeColor: (col: string) => void;
@@ -17,15 +19,11 @@ export interface IAccountsFormProps {
   onClose: () => void;
   onSubmit: () => void;
   type: AccountType;
+  onDelete: () => void;
+  isEdit: boolean;
 }
 
 const COLORS = ['#22c55e', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#64748b'];
-const TYPES: { value: AccountType; label: string; icon: string }[] = [
-  { value: 'bank', label: 'Банковский счёт', icon: '🏦' },
-  { value: 'card', label: 'Кредитная карта', icon: '💳' },
-  { value: 'cash', label: 'Наличные', icon: '💵' },
-  { value: 'deposit', label: 'Вклад', icon: '📈' },
-];
 
 export function AccountsFormsComponent({
   balance,
@@ -33,7 +31,8 @@ export function AccountsFormsComponent({
   creditLimit,
   currency,
   error,
-  isLoading,
+  isEdit,
+  isPending,
   name,
   onChangeBalance,
   onChangeColor,
@@ -42,15 +41,21 @@ export function AccountsFormsComponent({
   onChangeName,
   onChangeType,
   onClose,
+  onDelete,
   onSubmit,
   type,
 }: IAccountsFormProps) {
+  const getSubmitBtnText = () => {
+    if (isPending) return 'Submitting...';
+    return `${isEdit ? 'Edit' : 'Add'} account`;
+  };
+
   return (
     <div className="space-y-4">
       <div>
         <label className="block text-xs font-medium text-white/60 mb-2">Тип счёта</label>
         <div className="grid grid-cols-2 gap-2">
-          {TYPES.map((t) => (
+          {ACCOUNT_TYPES.map((t) => (
             <button
               key={t.value}
               className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors ${
@@ -71,7 +76,7 @@ export function AccountsFormsComponent({
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-white/60 mb-1.5">Название</label>
+        <label className="block text-xs font-medium text-white/60 mb-1.5">Name</label>
         <input
           autoFocus
           className="input"
@@ -85,21 +90,14 @@ export function AccountsFormsComponent({
 
       <div className="grid grid-cols-3 gap-3">
         <div className="col-span-2">
-          <label className="block text-xs font-medium text-white/60 mb-1.5">
-            {type === 'card' ? 'Текущий баланс (отрицательный = долг)' : 'Начальный баланс'}
-          </label>
-          <input
-            className="input"
-            placeholder="0"
-            type="number"
-            value={balance}
-            onChange={(e) => {
-              onChangeBalance(e.target.value);
-            }}
+          <MoneyInput
+            amount={balance}
+            label={type === 'card' ? 'Current balance (negative = debt)' : 'Initial balance'}
+            onSetAmount={onChangeBalance}
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-white/60 mb-1.5">Валюта</label>
+          <label className="block text-xs font-medium text-white/60 mb-1.5">Currency</label>
           <select
             className="input"
             value={currency}
@@ -117,7 +115,7 @@ export function AccountsFormsComponent({
       {type === 'card' && (
         <div>
           <label className="block text-xs font-medium text-white/60 mb-1.5">
-            Кредитный лимит
+            Credit limit
           </label>
           <input
             className="input"
@@ -158,17 +156,29 @@ export function AccountsFormsComponent({
 
       <div className="flex gap-3 pt-1">
         <button className="btn-ghost flex-1 justify-center" type="button" onClick={onClose}>
-          Отмена
+          Cancel
         </button>
         <button
           className="btn-primary flex-1 justify-center"
-          disabled={isLoading}
+          disabled={isPending}
           type="button"
           onClick={onSubmit}
         >
-          {isLoading ? 'Сохранение…' : 'Создать счёт'}
+          {getSubmitBtnText()}
         </button>
       </div>
+      {isEdit && (
+        <div className="flex gap-3 pt-1">
+          <button
+            className="btn-primary flex-1 bg-red-400/10 hover:bg-red-400/20 text-red-400"
+            disabled={isPending}
+            type="button"
+            onClick={onDelete}
+          >
+            Delete
+          </button>
+        </div>
+      )}
     </div>
   );
 }

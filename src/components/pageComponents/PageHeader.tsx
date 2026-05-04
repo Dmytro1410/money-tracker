@@ -1,10 +1,21 @@
 import { MonthSelector } from '@/components/MonthSelector';
 import { IPageHeaderProps } from '@/types/common.ts';
+import { formatCurrency } from '@/lib/formatters.ts';
 
-export function PageHeader({ onShowModal, title }: IPageHeaderProps) {
+export function PageHeader({ onShowModal, title, totalBalance }: IPageHeaderProps) {
   return (
     <div className="flex items-center justify-between h-10">
-      <h1 className="header-main">{title}</h1>
+      <div className="flex items-center justify-center gap-2">
+        <h1 className="header-main">{title}</h1>
+        {totalBalance && (
+          <span
+            className="font-display font-semibold text-white"
+            style={{ color: totalBalance < 0 ? '#fb7185' : '#34d399' }}
+          >
+            {formatCurrency(totalBalance)}
+          </span>
+        )}
+      </div>
       <div className="flex items-center gap-8">
         <div className="hidden xl:block"><MonthSelector /></div>
         <button

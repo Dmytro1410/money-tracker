@@ -12,6 +12,16 @@ export interface Profile {
   created_at: string
 }
 
+export interface IProfile {
+  avatarUrl: string | null
+  createdAt: string
+  currency: string
+  email: string
+  fullName: string | null
+  id: string
+  locale: string
+}
+
 export type FamilyRole = 'owner' | 'member' | 'viewer'
 
 export interface FamilyMember {
@@ -141,6 +151,7 @@ export interface IDatePickerComponentProps {
 // Page components
 export interface IPageHeaderProps {
   title: string,
+  totalBalance?: number,
   onShowModal: () => void
 }
 

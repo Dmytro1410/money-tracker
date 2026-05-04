@@ -1,13 +1,16 @@
 import { useAuthStore } from '@/stores';
-import { supabase } from '@/lib/supabase.ts';
+import { useLogout } from '@/hooks/Authentication.ts';
 
 export function UserSettings() {
-  const profile = useAuthStore((s) => s.profile);
+  const { profile } = useAuthStore();
 
-  const initials = profile?.full_name
-    ? profile.full_name.split(' ').map((w: string) => w[0]).join('').slice(0, 2)
+  const initials = profile?.fullName
+    ? profile.fullName.split(' ').map((w: string) => w[0]).join('').slice(0, 2)
       .toUpperCase()
     : profile?.email?.[0].toUpperCase() ?? '?';
+
+  const { mutate: handleOnLogout } = useLogout();
+
   return (
     <div className="p-4 border-t border-white/5">
       <div
@@ -19,13 +22,13 @@ export function UserSettings() {
           {initials}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-600 text-white/70 truncate">{profile?.full_name ?? profile?.email}</p>
+          <p className="text-xs font-600 text-white/70 truncate">{profile?.fullName ?? profile?.email}</p>
           <p className="text-2xs text-white/25 truncate">{profile?.currency ?? 'CAD'}</p>
         </div>
         <button
           className="opacity-0 group-hover:opacity-100 transition-opacity text-white/20 hover:text-red-400"
           type="button"
-          onClick={() => supabase.auth.signOut()}
+          onClick={() => handleOnLogout()}
         >
           <svg
             fill="none"

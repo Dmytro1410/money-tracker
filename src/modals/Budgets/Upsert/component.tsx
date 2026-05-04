@@ -26,7 +26,7 @@ export function UpsertBudgetsFormComponent({
         onSetSubCatId={onSetSubCatId}
       />
 
-      <MoneyInput amount={amount} onSetAmount={onSetAmount} />
+      <MoneyInput amount={amount} label="Month Limit" onSetAmount={onSetAmount} />
 
       {error && <p className="text-xs font-500 text-red-400 bg-red-400/10 rounded-xl px-3 py-2.5">{error}</p>}
 

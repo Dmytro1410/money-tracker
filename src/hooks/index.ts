@@ -1,21 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import type {
-  Account, AccountType, Category, PeriodSummary,
-} from '@/types/common.ts';
+import type { Category, PeriodSummary } from '@/types/common.ts';
 import { ITransaction } from '@/types/Transactions.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 // ─── Payload types ────────────────────────────────────────────
-export type AddAccountPayload = {
-  balance: number
-  color: string
-  credit_limit: number | null
-  currency: string
-  name: string
-  type: AccountType
-  user_id: string
-}
 
 export type SaveCategoryPayload = {
   color: string
@@ -28,29 +17,6 @@ export type SaveCategoryPayload = {
 }
 
 // ─── Accounts ────────────────────────────────────────────────
-export function useAccounts() {
-  return useQuery({
-    queryKey: ['accounts'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('accounts').select('*')
-        .eq('is_archived', false).order('created_at');
-      if (error) throw error;
-      return data as Account[];
-    },
-  });
-}
-
-export function useAddAccount() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (payload: AddAccountPayload) => {
-      const { error } = await supabase.from('accounts').insert(payload);
-      if (error) throw error;
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['accounts'] }),
-  });
-}
 
 // ─── Categories ──────────────────────────────────────────────
 export function useCategories(type: TRANSACTION_TYPES) {
