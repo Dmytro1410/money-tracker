@@ -1,15 +1,9 @@
 import { creditUsagePercent, formatCurrency } from '@/lib/formatters.ts';
-import { Account } from '@/types/common.ts';
+import { IAccountItemProps } from '@/types/Accounts.ts';
+import { TYPE_LABELS } from '@/constants/Accounts.ts';
+import { EditIconButton } from '@/components/Buttons/EditIconButton.tsx';
 
-const TYPE_LABELS: Record<string, string> = {
-  bank: 'Банковский счёт', card: 'Кредитная карта', cash: 'Наличные', deposit: 'Вклад',
-};
-
-export interface IAccountItemProps {
-  account: Account
-}
-
-export function AccountItem({ account }: IAccountItemProps) {
+export function AccountItem({ account, onEdit }: IAccountItemProps) {
   return (
     <div key={account.id} className="card-dark p-5">
       <div className="flex items-start justify-between">
@@ -25,21 +19,29 @@ export function AccountItem({ account }: IAccountItemProps) {
             <p className="text-xs text-white/30">{TYPE_LABELS[account.type] ?? account.type}</p>
           </div>
         </div>
-        <div className="text-right">
-          <p
-            className="font-display text-lg font-semibold"
-            style={{ color: account.balance < 0 ? '#fb7185' : '#34d399' }}
-          >
-            {formatCurrency(account.balance, account.currency)}
-          </p>
-          <p className="text-xs text-white/30">{account.currency}</p>
+        <div className="flex items-center gap-2">
+          <div className="text-right">
+            <p
+              className="font-display text-lg font-semibold"
+              style={{ color: account.balance < 0 ? '#fb7185' : '#34d399' }}
+            >
+              {formatCurrency(account.balance, account.currency)}
+            </p>
+            <p className="text-xs text-white/30">{account.currency}</p>
+
+          </div>
+          <EditIconButton onEdit={() => {
+            onEdit(account);
+          }}
+          />
         </div>
+
       </div>
 
       {account.credit_limit != null && account.credit_limit > 0 && (
         <div className="mt-4 pt-4 border-t border-white/5">
           <div className="flex justify-between text-xs text-white/30 mb-1.5">
-            <span>Использовано лимита</span>
+            <span>Limit used</span>
             <span>
               {formatCurrency(Math.abs(Math.min(0, account.balance)), account.currency)}
               {' '}
@@ -58,7 +60,7 @@ export function AccountItem({ account }: IAccountItemProps) {
             />
           </div>
           <p className="text-xs text-white/30 mt-1">
-            Доступно:
+            Available:
             {' '}
             {formatCurrency(account.credit_limit + Math.min(0, account.balance), account.currency)}
           </p>

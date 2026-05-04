@@ -1,24 +1,25 @@
 import { getFormattedInputNumber, parseOnChangeInputNumber } from '@/lib/formatters.ts';
 import { useAuthStore } from '@/stores';
-import { useAccounts } from '@/hooks';
+import { useFetchAccounts } from '@/hooks/Accounts.ts';
 
 export interface IMoneyInputProps {
   accountId?: string;
   amount: string;
+  label: string;
   onSetAmount: (amount: string) => void;
 }
 
 export function MoneyInput({
-  accountId, amount, onSetAmount,
+  accountId, amount, label, onSetAmount,
 }: IMoneyInputProps) {
-  const { data: accounts = [] } = useAccounts();
+  const { data: accounts = [] } = useFetchAccounts();
   const profile = useAuthStore((s) => s.profile);
 
   const currency = accounts.find((a) => a.id === accountId)?.currency ?? profile?.currency ?? 'CAD';
   return (
     <div>
       <label className="block text-2xs font-700 uppercase tracking-widest text-white/30 mb-1.5">
-        Limit for month
+        {label}
       </label>
       <div className="relative">
         <input

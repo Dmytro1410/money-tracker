@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Profile } from '@/types/common.ts';
+import { IProfile } from '@/types/common.ts';
 
 // ─── Auth store ──────────────────────────────────────────────────────
 interface AuthState {
-  profile: Profile | null
-  setProfile: (profile: Profile | null) => void
+  profile: IProfile | null
+  setProfile: (profile: IProfile | null) => void
 }
 
 export const useAuthStore = create<AuthState>()(
