@@ -12,13 +12,13 @@ export default function TransactionForm({
   transaction,
 }: ITransactionFormProps) {
   const {
-    account_id: txAccountId,
-    category_id: txCategoryId,
+    accountId: txAccountId,
+    categoryId: txCategoryId,
     date: txDate,
     id: txId,
     note: txNote,
-    transfer_pair_id: txPairId,
-    transfer_to_account_id: txToAccountId,
+    transferPairId: txPairId,
+    transferToAccountId: txToAccountId,
     type: txType,
   } = (transaction || {} as ITransaction);
 

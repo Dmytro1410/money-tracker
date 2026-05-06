@@ -5,7 +5,7 @@ import TransactionForm from '@/modals/Transactions/Upsert';
 import { TransactionsComponent } from '@/pages/Transactions/component.tsx';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { ITransaction } from '@/types/Transactions.ts';
-import { useGetTransactions } from '@/hooks/Transactions.ts';
+import { useGetTransactionsAPI } from '@/hooks/Transactions.ts';
 
 export default function Transactions() {
   const profile = useAuthStore((s) => s.profile);
@@ -15,7 +15,7 @@ export default function Transactions() {
   const [search, setSearch] = useState('');
   const [txToEdit, setTxToEdit] = useState<ITransaction | null>(null);
 
-  const { data: transactions = [], isLoading } = useGetTransactions();
+  const { data: transactions = [], isLoading } = useGetTransactionsAPI();
 
   const filtered = useMemo(() => transactions.filter((tx) => {
     if (filter !== 'all' && tx.type !== filter) return false;

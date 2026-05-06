@@ -48,7 +48,7 @@ export function ListItem({ currency, onEdit, transaction }: ITransactionsPageLis
   };
 
   const getTransactionMessage = () => {
-    if (transaction.type === TRANSACTION_TYPES.TRANSFER) return `${transaction.account?.name} ↔ ${transaction.to_account?.name}`;
+    if (transaction.type === TRANSACTION_TYPES.TRANSFER) return `${transaction.account?.name} ↔ ${transaction.toAccount?.name}`;
 
     const parentCatName = parents?.find((c) => c.id === transaction.category?.parent_id)?.name;
     return `${parentCatName} (${transaction.category?.name})${transaction.note ? `-${transaction.note}` : ''}`;

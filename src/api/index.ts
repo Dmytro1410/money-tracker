@@ -20,7 +20,7 @@ export const apiGet = async ({ url }: { url: string }) => {
   let error: null | Error = null;
   let data: unknown = null;
 
-  apiClient.get(url).then((res) => {
+  await apiClient.get(url).then((res) => {
     data = res.data;
   }).catch((err) => {
     error = err;
