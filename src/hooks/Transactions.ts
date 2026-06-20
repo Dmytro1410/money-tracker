@@ -10,7 +10,7 @@ import {
   ITransactionUpdateParams,
 } from '@/types/Transactions.ts';
 import { useUIStore } from '@/stores';
-import { getTransactions } from '@/api/transactions.ts';
+import { createTransaction, getAllTransactions } from '@/api/transactions.ts';
 
 const createTransfer = async (
   { base, toAccountId }: { base: ITransactionTransferPayload; toAccountId: string },
@@ -58,7 +58,7 @@ export function useGetTransactionsAPI() {
   return useQuery({
     queryKey: ['transactions', year, month],
     queryFn: async () => {
-      const { data, error } = await getTransactions({ from, to });
+      const { data, error } = await getAllTransactions({ from, to });
       if (error) throw error;
 
       return data as ITransaction[];
@@ -66,32 +66,20 @@ export function useGetTransactionsAPI() {
   });
 }
 
-export function useAddTransaction(_onSuccess?: () => void) {
+export function useAddTransactionAPI(_onSuccess?: () => void) {
   const qc = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: ITransactionBasePayload) => {
-      const {
-        accountId, amount, categoryId, date, note, tags, toAccountId, type,
-      } = payload;
+      const { amount, tags } = payload;
       const parsed = parseFloat(amount);
       baseAddEditValidation({ payload, parsed });
-      const base = {
-        accountId,
-        categoryId,
-        date,
-        note,
-        type,
-        amount: parsed,
-        tags: buildTagList(tags),
-      };
 
-      if (type === TRANSACTION_TYPES.TRANSFER) {
-        await createTransfer({ base, toAccountId });
-      } else {
-        const { error } = await supabase.from('transactions').insert({ ...base });
-        if (error) throw error;
-      }
+      const { error } = await createTransaction({
+        ...payload,
+        tags: buildTagList(tags),
+      });
+      if (error) throw error;
     },
     onSuccess: () => {
       invalidateQueries(qc);
@@ -106,7 +94,7 @@ export function useUpdateTransaction(_onSuccess?: () => void) {
   return useMutation({
     mutationFn: async (payload: ITransactionUpdateParams) => {
       const {
-        accountId, amount, categoryId, date, id, note, pairId, tags, toAccountId, type,
+        accountId, amount, categoryId, date, id, note, pairId, tags, transferToAccountId, type,
       } = payload;
       const parsed = parseFloat(amount);
       baseAddEditValidation({ payload, parsed });
@@ -126,7 +114,7 @@ export function useUpdateTransaction(_onSuccess?: () => void) {
         // delete both (balance trigger will roll back both accounts)
         await supabase.from('transactions').delete().eq('id', id);
         await supabase.from('transactions').delete().eq('id', pairId);
-        await createTransfer({ base, toAccountId });
+        await createTransfer({ base, toAccountId: transferToAccountId });
       }
 
       const { error } = await supabase

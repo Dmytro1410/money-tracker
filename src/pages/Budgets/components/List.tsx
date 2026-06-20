@@ -1,15 +1,15 @@
 import { IBudgetsBudgetListProps } from '@/types/Budgets.ts';
 import { useGetBudgets } from '@/hooks/Budgets.ts';
-import { useCategories } from '@/hooks';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { useState } from 'react';
 import { getParentStats, getPct } from '@/pages/Budgets/utils.ts';
 import { BudgetsPageListItem } from '@/pages/Budgets/components/ListItem.tsx';
 import { PageEmptyList } from '@/components/pageComponents/PageEmptyList.tsx';
+import { useGetAllCategoriesAPI } from '@/hooks/Categories.ts';
 
 export function BudgetsPageList({ onShowBudgetModal }: IBudgetsBudgetListProps) {
   const { data: budgets, isLoading } = useGetBudgets();
-  const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
+  const { data: catData } = useGetAllCategoriesAPI(TRANSACTION_TYPES.EXPENSE);
 
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 

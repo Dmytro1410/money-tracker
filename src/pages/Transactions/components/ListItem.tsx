@@ -1,11 +1,11 @@
 import { formatCurrency, formatDate } from '@/lib/formatters.ts';
 import { ITransactionsPageListItemProps } from '@/types/Transactions.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
-import { useCategories } from '@/hooks';
 import { EditIconButton } from '@/components/Buttons/EditIconButton.tsx';
+import { useGetAllCategoriesAPI } from '@/hooks/Categories.ts';
 
 export function ListItem({ currency, onEdit, transaction }: ITransactionsPageListItemProps) {
-  const { data } = useCategories(transaction.type);
+  const { data } = useGetAllCategoriesAPI(transaction.type);
   const { parents } = data || {};
   const getTransactionIcon = () => {
     if (transaction.category?.icon) return transaction.category.icon;

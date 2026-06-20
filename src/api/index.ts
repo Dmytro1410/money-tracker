@@ -30,7 +30,7 @@ export const apiGet = async ({ url }: { url: string }) => {
 };
 
 export const apiPost = async ({ body, url }: {
-  body: Record<string, unknown>; url: string
+  body: Record<string | number | symbol, unknown>; url: string
 }) => {
   let error: null | Error = null;
   let data: unknown = null;

@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useCategories } from '@/hooks';
 import { TransactionsModalComponent } from '@/modals/Transactions/Upsert/component.tsx';
-import { useAddTransaction, useDeleteTransaction, useUpdateTransaction } from '@/hooks/Transactions.ts';
+import { useAddTransactionAPI, useDeleteTransaction, useUpdateTransaction } from '@/hooks/Transactions.ts';
 import { TABS, TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { ITransaction, ITransactionFormProps } from '@/types/Transactions.ts';
 import { useFetchAccounts } from '@/hooks/Accounts.ts';
+import { useGetAllCategoriesAPI } from '@/hooks/Categories.ts';
 
 export default function TransactionForm({
   filter,
@@ -26,7 +26,9 @@ export default function TransactionForm({
   const txParentCatId: string | undefined | null = transaction?.category?.parent_id;
   const txTags: string | undefined = transaction?.tags?.join(',');
 
-  const [type, setType] = useState<TRANSACTION_TYPES>(txType ?? filter);
+  const [type, setType] = useState<TRANSACTION_TYPES>(
+    txType ?? filter === TRANSACTION_TYPES.ALL ? TRANSACTION_TYPES.EXPENSE : filter,
+  );
   const [amount, setAmount] = useState(txAmount ?? '');
   const [accountId, setAccountId] = useState(txAccountId ?? '');
   const [toAccountId, setToAccountId] = useState(txToAccountId ?? '');
@@ -37,7 +39,7 @@ export default function TransactionForm({
   const [tags, setTags] = useState(txTags ?? '');
 
   const { data: accounts = [] } = useFetchAccounts();
-  const { data: catData } = useCategories(type);
+  const { data: catData } = useGetAllCategoriesAPI(type);
 
   const { children = [], parents = [] } = catData || {};
   const subCategories = children.filter((c) => c.parent_id === parentCatId);
@@ -47,7 +49,7 @@ export default function TransactionForm({
 
   const {
     error: submitError, isPending: isPendingSubmit, mutate: submitTx,
-  } = useAddTransaction(onClose);
+  } = useAddTransactionAPI(onClose);
   const {
     error: editError, isPending: isPendingEdit, mutate: editTx,
   } = useUpdateTransaction(onClose);

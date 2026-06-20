@@ -31,11 +31,11 @@ export interface ITransactionBasePayload {
   date: string
   note: string
   tags: string
-  toAccountId: string
+  transferToAccountId?: string
   type: TRANSACTION_TYPES;
 }
 
-export interface ITransactionTransferPayload extends Omit<ITransactionBasePayload, 'amount' | 'accountId' | 'categoryId' | 'tags' | 'toAccountId'> {
+export interface ITransactionTransferPayload extends Omit<ITransactionBasePayload, 'amount' | 'accountId' | 'categoryId' | 'tags' | 'transferToAccountId'> {
   accountId: string;
   amount: number;
   categoryId: string | null;

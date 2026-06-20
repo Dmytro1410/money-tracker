@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import type { Category, PeriodSummary } from '@/types/common.ts';
+import type { PeriodSummary } from '@/types/common.ts';
 import { ITransaction } from '@/types/Transactions.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
@@ -17,27 +17,6 @@ export type SaveCategoryPayload = {
 }
 
 // ─── Accounts ────────────────────────────────────────────────
-
-// ─── Categories ──────────────────────────────────────────────
-export function useCategories(type: TRANSACTION_TYPES) {
-  return useQuery({
-    queryKey: ['categories', type],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('type', type === 'transfer' ? 'expense' : type)
-        .order('name');
-      if (error) throw error;
-      const all = data as Category[];
-      return {
-        all,
-        parents: all.filter((c) => !c.parent_id),
-        children: all.filter((c) => c.parent_id),
-      };
-    },
-  });
-}
 
 // ─── Budgets ─────────────────────────────────────────────────
 // export function useUpsertBudget() {
