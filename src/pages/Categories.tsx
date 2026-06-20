@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores';
 import type { Category } from '@/types/common.ts';
 import Modal from '@/components/Modal.tsx';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
+import { useGetAllCategoriesAPI } from '@/hooks/Categories.ts';
 
 const TYPES: { value: TRANSACTION_TYPES; label: string }[] = [
   { value: TRANSACTION_TYPES.EXPENSE, label: 'Расходы' },
@@ -38,7 +39,6 @@ const EMPTY_FORM: CategoryFormData = {
 
 export default function Categories() {
   const profile = useAuthStore((s) => s.profile);
-  const qc = useQueryClient();
 
   const [activeType, setActiveType] = useState<TRANSACTION_TYPES>(TRANSACTION_TYPES.EXPENSE);
   const [showModal, setShowModal] = useState(false);
@@ -47,19 +47,9 @@ export default function Categories() {
   const [error, setError] = useState<string | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
-  // Загружаем все категории пользователя + системные
-  const { data: categories = [], isLoading } = useQuery({
-    queryKey: ['categories-all'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('*')
-        .or(`user_id.eq.${profile!.id},is_system.eq.true`)
-        .order('name');
-      if (error) throw error;
-      return data as Category[];
-    },
-  });
+  const { data, isLoading } = useGetAllCategoriesAPI();
+
+  const categories = data?.all ?? [];
 
   const parents = categories.filter((c) => !c.parent_id && c.type === activeType);
   const children = categories.filter((c) => c.parent_id && c.type === activeType);

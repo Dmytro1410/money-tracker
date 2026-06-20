@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import { useCategories } from '@/hooks';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
+import { useGetAllCategoriesAPI } from '@/hooks/Categories.ts';
 
 export function UpsertBudgetsFormCategories({
   onSetParentCatId,
@@ -13,7 +13,7 @@ export function UpsertBudgetsFormCategories({
   parentCatId: string;
   subCatId: string;
 }) {
-  const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
+  const { data: catData } = useGetAllCategoriesAPI(TRANSACTION_TYPES.EXPENSE);
   const { children = [], parents = [] } = catData || {};
   const subCategories = children.filter((c) => c.parent_id === parentCatId);
   const isSelected = (c: string) => parentCatId === c || subCatId === c;

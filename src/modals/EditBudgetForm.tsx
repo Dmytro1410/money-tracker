@@ -1,11 +1,11 @@
 import { useAuthStore, useUIStore } from '@/stores';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useCategories } from '@/hooks';
 import { supabase } from '@/lib/supabase.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 import { getFormattedInputNumber, parseOnChangeInputNumber } from '@/lib/formatters.ts';
 import { TBudgetPeriod } from '@/types/Budgets.ts';
+import { useGetAllCategoriesAPI } from '@/hooks/Categories.ts';
 
 const PERIODS: { value: TBudgetPeriod; label: string }[] = [
   { value: 'month', label: 'Месяц' },
@@ -31,7 +31,7 @@ export function EditBudgetForm({
   const [period, setPeriod] = useState<TBudgetPeriod>(editPeriod ?? 'month');
   const [error, setError] = useState<string | null>(null);
 
-  const { data: catData } = useCategories(TRANSACTION_TYPES.EXPENSE);
+  const { data: catData } = useGetAllCategoriesAPI(TRANSACTION_TYPES.EXPENSE);
   const { all: allCats = [], children = [], parents = [] } = catData || {};
 
   const selectedCat = allCats.find((c) => c.id === categoryId);

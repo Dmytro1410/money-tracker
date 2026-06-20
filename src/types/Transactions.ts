@@ -1,26 +1,26 @@
-import { Account, Category, RecurRule } from '@/types/common.ts';
+import { Account, Category } from '@/types/common.ts';
 import { TRANSACTION_TYPES } from '@/constants/Transactions.ts';
 
 // Transaction interfaces
 
 export interface ITransaction {
   account?: Pick<Account, 'id' | 'name' | 'currency' | 'color'>
-  account_id: string
+  accountId: string
   amount: number
   category?: Pick<Category, 'id' | 'name' | 'icon' | 'color' | 'parent_id'>
-  category_id: string | null
-  created_at: string
+  categoryId: string | null
+  createdAt: string
   date: string
   id: string
-  imported_hash: string | null
-  is_recurring: boolean
+  // imported_hash: string | null
+  // is_recurring: boolean
   note: string | null
-  recur_end_date: string | null
-  recur_rule: RecurRule | null
+  // recur_end_date: string | null
+  // recur_rule: RecurRule | null
   tags: string[]
-  to_account?: Pick<Account, 'id' | 'name' | 'currency' | 'color'>
-  transfer_pair_id: string | null
-  transfer_to_account_id: string | null
+  toAccount?: Pick<Account, 'id' | 'name' | 'currency' | 'color'>
+  transferPairId: string | null
+  transferToAccountId: string | null
   type: TRANSACTION_TYPES
 }
 
@@ -31,14 +31,14 @@ export interface ITransactionBasePayload {
   date: string
   note: string
   tags: string
-  toAccountId: string
+  transferToAccountId?: string
   type: TRANSACTION_TYPES;
 }
 
-export interface ITransactionTransferPayload extends Omit<ITransactionBasePayload, 'amount' | 'accountId' | 'categoryId' | 'tags' | 'toAccountId'> {
-  account_id: string;
+export interface ITransactionTransferPayload extends Omit<ITransactionBasePayload, 'amount' | 'accountId' | 'categoryId' | 'tags' | 'transferToAccountId'> {
+  accountId: string;
   amount: number;
-  category_id: string | null;
+  categoryId: string | null;
   tags: string[];
 }
 

@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/stores';
 import { DashboardComponent } from '@/pages/Dashboard/component.tsx';
 import { getMonthExpense, getMonthIncome, getTotalBalance } from '@/pages/Dashboard/utils.ts';
-import { useGetTransactions } from '@/hooks/Transactions.ts';
+import { useGetTransactionsAPI } from '@/hooks/Transactions.ts';
 import { useGetBudgets } from '@/hooks/Budgets.ts';
 import { useFetchAccounts } from '@/hooks/Accounts.ts';
 
@@ -9,7 +9,7 @@ export default function Dashboard() {
   const { profile } = useAuthStore();
   const currency = profile?.currency ?? 'CAD';
 
-  const { data: transactions = [] } = useGetTransactions();
+  const { data: transactions = [] } = useGetTransactionsAPI();
   const { data: accounts = [] } = useFetchAccounts();
   const {
     data: budgets = {
